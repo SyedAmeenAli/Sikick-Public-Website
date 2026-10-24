@@ -17,7 +17,7 @@ function RetailVisual() {
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-url">app.sikick.com · retail</span>
-        <span className="ui-demo-tag">Sample data</span>
+        <span className="ui-demo-tag">Morrow Goods</span>
       </div>
       <div className="ui-body">
         <div className="ui-topbar">
@@ -49,10 +49,10 @@ function RetailVisual() {
         <div className="ui-panel">
           <div className="ui-panel-title">Recent sales</div>
           {[
-            { sku: 'SKU-1042', name: 'Cotton T-shirt (M, Navy)', qty: '2', badge: 'ok' },
-            { sku: 'SKU-2081', name: 'Wireless earbuds (Black)', qty: '1', badge: 'low' },
-            { sku: 'SKU-3310', name: 'Ceramic mug 350ml', qty: '4', badge: 'ok' },
-            { sku: 'SKU-1187', name: 'A4 notebook 200pg', qty: '1', badge: 'out' },
+            { sku: 'SKU-1042', name: 'Cotton T-shirt (M)', qty: '2', badge: 'ok' },
+            { sku: 'SKU-2081', name: 'Wireless earbuds', qty: '1', badge: 'low' },
+            { sku: 'SKU-3311', name: 'Steel bottle 750ml', qty: '4', badge: 'ok' },
+            { sku: 'SKU-4120', name: 'Notebook A5', qty: '1', badge: 'ok' },
           ].map((row) => (
             <div className="ui-row" key={row.sku}>
               <span className="ui-sku">{row.sku}</span>
@@ -77,7 +77,7 @@ function WholesaleVisual() {
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-url">app.sikick.com · wholesale</span>
-        <span className="ui-demo-tag">Sample data</span>
+        <span className="ui-demo-tag">Morrow Goods</span>
       </div>
       <div className="ui-body">
         <div className="ui-topbar">
@@ -148,7 +148,7 @@ function DistributionVisual() {
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-url">app.sikick.com · distribution</span>
-        <span className="ui-demo-tag">Sample data</span>
+        <span className="ui-demo-tag">Morrow Goods</span>
       </div>
       <div className="ui-body">
         <div className="ui-topbar">
@@ -211,7 +211,7 @@ function ManufacturingVisual() {
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-url">app.sikick.com · manufacturing</span>
-        <span className="ui-demo-tag">Sample data</span>
+        <span className="ui-demo-tag">Morrow Goods</span>
       </div>
       <div className="ui-body">
         <div className="ui-topbar">

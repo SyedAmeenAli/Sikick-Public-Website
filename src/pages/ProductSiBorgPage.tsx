@@ -4,6 +4,7 @@ import { Check, ArrowRight, MessageSquareText, Lightbulb, FileCheck, ShieldCheck
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
 import { FaqAccordion } from '../components/FaqAccordion';
+import { SiBorgConstellation, SiBorgDemo, SiBorgStage } from '../components/SiBorgExperience';
 
 const lifecycle = [
   { step: 'Detect', desc: 'Spot patterns in sales, stock and purchasing data.' },
@@ -92,6 +93,14 @@ export default function ProductSiBorgPage() {
           </div>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <SiBorgStage wide />
+          <div style={{ height: 'var(--space-64)' }} />
+          <SiBorgConstellation /><div style={{ height: 'var(--space-48)' }} /><div style={{ maxWidth: 720, margin: '0 auto' }}><SiBorgDemo /></div>
+        </div>
+      </section>
+
 
       <section className="section section-blush">
         <div className="container">
@@ -117,7 +126,7 @@ export default function ProductSiBorgPage() {
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-url">sikick · siborg</span>
-                <span className="ui-demo-tag">Sample data</span>
+                <span className="ui-demo-tag">Morrow Goods</span>
               </div>
               <div className="ui-body">
                 <div className="ui-panel ui-siborg">

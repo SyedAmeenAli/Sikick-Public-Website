@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSeo } from '../lib/seo';
+import { ReadingProgress } from '../components/HomeSections';
 
 const sections = [
   { id: 'summary', label: 'Summary' },
@@ -25,6 +26,7 @@ export default function LegalPrivacyPage() {
 
   return (
     <div className="section">
+      <ReadingProgress />
       <div className="container" style={{ maxWidth: '50rem' }}>
         <p className="eyebrow">Legal</p>
         <h1>Privacy Policy</h1>

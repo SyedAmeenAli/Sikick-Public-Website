@@ -4,6 +4,7 @@ import { Check, ArrowRight, TrendingUp, PackageSearch, Truck, LayoutDashboard, B
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
 import { FaqAccordion } from '../components/FaqAccordion';
+import { AnalyticsLineIllustration } from '../components/hairline/Illustrations';
 
 const features = [
   {
@@ -82,6 +83,12 @@ export default function ProductReportsPage() {
           </div>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <AnalyticsLineIllustration />
+        </div>
+      </section>
+
 
       <section className="section section-blush">
         <div className="container">
@@ -107,7 +114,7 @@ export default function ProductReportsPage() {
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-url">sikick · reports</span>
-                <span className="ui-demo-tag">Sample data</span>
+                <span className="ui-demo-tag">Morrow Goods</span>
               </div>
               <div className="ui-body">
                 <div className="ui-topbar">

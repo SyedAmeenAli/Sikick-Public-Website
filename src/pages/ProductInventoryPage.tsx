@@ -4,6 +4,7 @@ import { Check, ArrowRight, Package, Tag, Barcode, Upload, FileSpreadsheet, Aler
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
 import { FaqAccordion } from '../components/FaqAccordion';
+import { BarcodeScanIllustration, InventoryShelfIllustration } from '../components/hairline/Illustrations';
 
 const features = [
   {
@@ -82,6 +83,12 @@ export default function ProductInventoryPage() {
           </div>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <InventoryShelfIllustration /><div style={{ height: 'var(--space-48)' }} /><BarcodeScanIllustration />
+        </div>
+      </section>
+
 
       <section className="section section-blush">
         <div className="container">
@@ -107,7 +114,7 @@ export default function ProductInventoryPage() {
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-url">sikick · catalog</span>
-                <span className="ui-demo-tag">Sample data</span>
+                <span className="ui-demo-tag">Morrow Goods</span>
               </div>
               <div className="ui-body">
                 <div className="ui-topbar">
@@ -117,27 +124,27 @@ export default function ProductInventoryPage() {
                   <div className="ui-panel-title">Variants</div>
                   <div className="ui-row">
                     <span className="ui-sku">SKU-1042</span>
-                    <span className="ui-name">Cotton T-shirt — Navy / M</span>
-                    <span className="ui-qty">142</span>
+                    <span className="ui-name">Cotton T-shirt (M)</span>
+                    <span className="ui-qty">128</span>
                     <span className="ui-badge ui-badge-ok">OK</span>
                   </div>
                   <div className="ui-row">
                     <span className="ui-sku">SKU-1043</span>
-                    <span className="ui-name">Cotton T-shirt — Navy / L</span>
-                    <span className="ui-qty">38</span>
+                    <span className="ui-name">Cotton T-shirt (L)</span>
+                    <span className="ui-qty">96</span>
+                    <span className="ui-badge ui-badge-ok">OK</span>
+                  </div>
+                  <div className="ui-row">
+                    <span className="ui-sku">SKU-5002</span>
+                    <span className="ui-name">LED desk lamp</span>
+                    <span className="ui-qty">9</span>
                     <span className="ui-badge ui-badge-low">Low</span>
                   </div>
                   <div className="ui-row">
-                    <span className="ui-sku">SKU-1044</span>
-                    <span className="ui-name">Cotton T-shirt — Olive / M</span>
-                    <span className="ui-qty">0</span>
-                    <span className="ui-badge ui-badge-out">Out</span>
-                  </div>
-                  <div className="ui-row">
                     <span className="ui-sku">SKU-2081</span>
-                    <span className="ui-name">Wireless earbuds — Black</span>
-                    <span className="ui-qty">89</span>
-                    <span className="ui-badge ui-badge-ok">OK</span>
+                    <span className="ui-name">Wireless earbuds</span>
+                    <span className="ui-qty">14</span>
+                    <span className="ui-badge ui-badge-low">Low</span>
                   </div>
                 </div>
                 <div className="ui-panel">

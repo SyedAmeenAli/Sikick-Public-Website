@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="./gsap.min.js"></script>
+    <script src="./mark-data.js"></script>
+    <style>
+      @font-face { font-family: 'DM Sans'; font-weight: 400; src: url('./fonts/dm-sans-latin-400-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'DM Sans'; font-weight: 500; src: url('./fonts/dm-sans-latin-500-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'DM Sans'; font-weight: 600; src: url('./fonts/dm-sans-latin-600-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Newsreader'; font-weight: 500; src: url('./fonts/newsreader-latin-500-normal.woff2') format('woff2'); }
+      :root {
+        --ground: #0d0a0c;
+        --ink: #f3ece6;
+        --muted: #a99da2;
+        --wine: #8b1538;
+        --rose: #e9a7b8;
+        --line: rgba(243, 236, 230, 0.82);
+        --line-dim: rgba(243, 236, 230, 0.3);
+        --panel: rgba(23, 17, 20, 0.88);
+        --panel-edge: rgba(243, 236, 230, 0.16);
+        --ok: #7fc8a4;
+        --warn: #e0a55c;
+        --font-body: 'DM Sans', system-ui, sans-serif;
+        --font-display: 'Newsreader', Georgia, serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: var(--font-body); color: var(--ink); background: var(--ground); }
+      .light { position: absolute; inset: 0; background:
+        radial-gradient(ellipse 760px 520px at 84% 12%, rgba(139, 21, 56, 0.30), transparent 70%),
+        radial-gradient(ellipse 900px 600px at 8% 96%, rgba(90, 8, 27, 0.20), transparent 70%); }
+      #wires { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+      .wire { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+      .wire.dim { stroke: var(--line-dim); }
+      .wire.hot { stroke: #c9506f; stroke-width: 2; }
+      .node { fill: var(--ground); stroke: var(--line); stroke-width: 1.5; }
+      .node.hot { fill: #c9506f; stroke: #c9506f; }
+      .signal { fill: #e9a7b8; }
+
+      .panel { position: absolute; background: var(--panel); border: 1.5px solid var(--panel-edge); border-radius: 22px; padding: 28px 30px; box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(243, 236, 230, 0.1); }
+      .eyebrow { display: flex; align-items: center; gap: 12px; font-size: 20px; color: var(--muted); font-weight: 500; }
+      .eyebrow b { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--rose); color: var(--rose); font-size: 16px; font-weight: 600; }
+      .tag { margin-left: auto; font-size: 17px; color: var(--rose); border: 1.5px solid rgba(233, 167, 184, 0.5); border-radius: 999px; padding: 3px 14px; }
+
+      #bc { left: 90px; top: 110px; width: 430px; height: 450px; }
+      #bcart { position: absolute; left: 30px; top: 96px; width: 370px; height: 150px; }
+      #bcart rect.bar { fill: var(--ink); }
+      #scan { position: absolute; left: 30px; top: 84px; width: 4px; height: 176px; background: #e9a7b8; box-shadow: 0 0 14px 2px rgba(201, 80, 111, 0.65); border-radius: 2px; }
+      #digits { position: absolute; left: 30px; top: 254px; width: 370px; text-align: center; font-size: 19px; letter-spacing: 0.22em; color: var(--muted); }
+      #sku { position: absolute; left: 30px; top: 306px; width: 370px; }
+      #sku .name { font-family: var(--font-display); font-size: 40px; line-height: 1.1; }
+      #sku .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; font-size: 22px; color: var(--muted); }
+      #sku .meta b { color: var(--ink); font-weight: 500; }
+      .stockpill { display: inline-flex; gap: 8px; align-items: center; font-size: 21px; color: var(--warn); border: 1.5px solid rgba(224, 165, 92, 0.55); border-radius: 999px; padding: 4px 16px; }
+
+      #pos { left: 590px; top: 110px; width: 560px; height: 590px; }
+      .posbar { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+      .search { flex: 1; border: 1.5px solid var(--panel-edge); border-radius: 999px; padding: 10px 20px; font-size: 20px; color: var(--muted); }
+      .line { display: grid; grid-template-columns: 1fr auto 110px; align-items: center; gap: 18px; padding: 11px 0; border-bottom: 1.5px solid var(--panel-edge); font-size: 24px; }
+      .line small { display: block; font-size: 18px; color: var(--muted); }
+      .qty { display: inline-flex; align-items: center; gap: 12px; border: 1.5px solid var(--panel-edge); border-radius: 999px; padding: 4px 14px; font-size: 22px; }
+      .qty i { font-style: normal; color: var(--muted); }
+      .amt { text-align: right; font-weight: 500; }
+      #cart { margin-top: 14px; height: 178px; }
+      .sum { margin-top: 14px; display: grid; gap: 8px; font-size: 22px; color: var(--muted); }
+      .sum div { display: flex; justify-content: space-between; }
+      .sum .total { margin-top: 6px; padding-top: 12px; border-top: 1.5px solid var(--panel-edge); color: var(--ink); font-size: 32px; font-weight: 600; }
+      .pay { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+      .pay span { text-align: center; padding: 8px 0; border: 1.5px solid var(--panel-edge); border-radius: 14px; font-size: 20px; color: var(--muted); }
+      .cta { margin-top: 16px; text-align: center; background: var(--wine); color: #fff; border-radius: 999px; padding: 14px 0; font-size: 23px; font-weight: 600; }
+
+      #rc { left: 1220px; top: 110px; width: 250px; height: 410px; background: transparent; border: none; box-shadow: none; padding: 0; }
+      #rcsvg { position: absolute; inset: 0; width: 250px; height: 410px; overflow: visible; }
+      #rcfill { fill: rgba(243, 236, 230, 0.07); stroke: none; }
+      #rcline { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-linejoin: round; }
+      #rctext { position: absolute; left: 24px; right: 24px; top: 26px; font-size: 18px; color: var(--ink); display: grid; gap: 7px; }
+      #rctext .t { font-weight: 600; font-size: 21px; }
+      #rctext .s { color: var(--muted); font-size: 16px; }
+      #rctext .r { display: flex; justify-content: space-between; gap: 8px; }
+      #rctext .rule { height: 0; border-top: 1.5px dashed var(--line-dim); margin: 6px 0; }
+      #rctext .tot { font-weight: 600; font-size: 22px; }
+      .stamp { display: inline-block; font-size: 15px; font-weight: 600; color: var(--rose); border: 1.5px solid var(--rose); border-radius: 6px; padding: 1px 10px; justify-self: start; }
+      .done { color: var(--ok); font-size: 17px; font-weight: 500; }
+
+      #sh { left: 590px; top: 750px; width: 560px; height: 230px; padding: 22px 30px; }
+      #shsvg { position: absolute; left: 24px; top: 62px; width: 330px; height: 150px; }
+      #shinfo { position: absolute; right: 30px; top: 66px; width: 170px; font-size: 19px; color: var(--muted); line-height: 1.5; }
+      #shinfo b { color: var(--ink); font-weight: 500; display: block; font-size: 21px; }
+      #shnum { font-family: var(--font-display); font-size: 58px; color: var(--ink); line-height: 1; margin-top: 6px; display: block; }
+
+      #lg { left: 90px; top: 600px; width: 430px; height: 380px; }
+      .lrow { display: grid; grid-template-columns: 62px 1fr auto; gap: 12px; font-size: 20px; padding: 13px 10px; margin: 0 -10px; border-bottom: 1.5px solid var(--panel-edge); color: var(--muted); }
+      .lrow b { color: var(--ink); font-weight: 500; }
+      .lrow.new { background: rgba(139, 21, 56, 0.28); border-radius: 12px; border-bottom-color: transparent; color: var(--ink); }
+      .pos-n { color: var(--ok); } .neg-n { color: var(--rose); }
+
+      #in { left: 1520px; top: 110px; width: 310px; height: 450px; padding: 26px; }
+      #in h3 { font-family: var(--font-display); font-weight: 500; font-size: 36px; line-height: 1.1; margin: 16px 0 16px; }
+      #in ul { list-style: none; display: grid; gap: 10px; font-size: 19px; color: var(--muted); }
+      #in li { padding-left: 16px; position: relative; }
+      #in li::before { content: ''; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--rose); }
+      #in .act { margin-top: 18px; border: 1.5px solid #c9506f; border-radius: 16px; padding: 12px 14px; background: rgba(139, 21, 56, 0.28); font-size: 19px; }
+      #in .act b { display: block; font-size: 21px; font-weight: 600; }
+      #in .act span { color: var(--muted); font-size: 16px; }
+
+      #mk { left: 1520px; top: 600px; width: 310px; height: 380px; background: transparent; border: none; box-shadow: none; padding: 0; }
+      #mksvg { position: absolute; left: 20px; top: 0; width: 270px; height: 300px; overflow: visible; }
+      #mklabel { position: absolute; left: 0; right: 0; top: 314px; text-align: center; }
+      #mklabel b { font-family: var(--font-display); font-weight: 500; font-size: 34px; }
+      #mklabel div { position: relative; color: var(--muted); font-size: 18px; margin-top: 2px; height: 26px; }
+      #mklabel div span { position: absolute; left: 0; right: 0; }
+      .orb { fill: none; stroke: var(--rose); stroke-width: 0.9; opacity: 0.5; }
+      .lead { fill: none; stroke: var(--rose); stroke-width: 1.4; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div class="light clip" data-start="0" data-duration="10"></div>
+
+      <svg id="wires" class="clip" data-start="0" data-duration="10" viewBox="0 0 1920 1080">
+        <path id="w1" class="wire" pathLength="1" d="M520 335 H590" />
+        <path id="w2" class="wire" pathLength="1" d="M1150 335 H1220" />
+        <path id="w3" class="wire" pathLength="1" d="M870 700 V750" />
+        <path id="w6" class="wire dim" pathLength="1" d="M590 850 H520" />
+        <path id="w4" class="wire hot" pathLength="1" d="M1150 880 H1290 Q1300 880 1300 870 V800 Q1300 790 1310 790 H1520" />
+        <path id="w5" class="wire hot" pathLength="1" d="M1675 600 V560" />
+        <circle id="n1" class="node" cx="520" cy="335" r="6" />
+        <circle id="n2" class="node" cx="1150" cy="335" r="6" />
+        <circle id="n3" class="node" cx="870" cy="700" r="6" />
+        <circle id="n4" class="node hot" cx="1150" cy="880" r="6" />
+        <circle id="n5" class="node hot" cx="1675" cy="560" r="6" />
+        <circle id="sig" class="signal" r="6" cx="1150" cy="880" />
+      </svg>
+
+      <div id="bc" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>1</b> Scan <span class="tag">Main Store</span></div>
+        <svg id="bcart" viewBox="0 0 370 150"></svg>
+        <div id="scan"></div>
+        <div id="digits">8 901234 567897</div>
+        <div id="sku">
+          <div class="name">Wireless earbuds</div>
+          <div class="meta"><span>SKU-2081 · <b>₹1,499</b></span><span class="stockpill"><span id="q1">14</span> in stock</span></div>
+        </div>
+      </div>
+
+      <div id="pos" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>2</b> Sale <span class="tag">Main Store</span></div>
+        <div class="posbar"><div class="search">Search name or scan SKU</div><div style="font-size:20px;color:var(--muted)">Sale #4822</div></div>
+        <div id="cart">
+          <div class="line" id="l1">
+            <div>Wireless earbuds<small>SKU-2081 · ₹1,499 each</small></div>
+            <div class="qty"><i>−</i><span id="qv">1</span><i>+</i></div>
+            <div class="amt" id="a1">₹1,499</div>
+          </div>
+          <div class="line" id="l2">
+            <div>Notebook A5<small>SKU-4120 · ₹149 each</small></div>
+            <div class="qty"><i>−</i><span>1</span><i>+</i></div>
+            <div class="amt">₹149</div>
+          </div>
+        </div>
+        <div class="sum">
+          <div><span>Subtotal</span><span id="sub">₹1,499</span></div>
+          <div class="total"><span>Total</span><span id="tot">₹1,499</span></div>
+        </div>
+        <div class="pay"><span>Cash</span><span id="payupi">UPI</span><span>QR</span></div>
+        <div class="cta" id="cta">Complete demo sale · <span id="ctat">₹1,499</span></div>
+      </div>
+
+      <div id="rc" class="panel clip" data-start="0" data-duration="10">
+        <svg id="rcsvg" viewBox="0 0 250 410">
+          <path id="rcfill" d="M0 0 H250 V394 L230 382 L210 394 L190 382 L170 394 L150 382 L130 394 L110 382 L90 394 L70 382 L50 394 L30 382 L10 394 L0 382 Z" />
+          <path id="rcline" pathLength="1" d="M0 0 H250 V394 L230 382 L210 394 L190 382 L170 394 L150 382 L130 394 L110 382 L90 394 L70 382 L50 394 L30 382 L10 394 L0 382 Z" />
+        </svg>
+        <div id="rctext">
+          <span class="stamp">Demo receipt</span>
+          <div class="t">Morrow Goods</div>
+          <div class="s">Till 2 · Sale #4822 · UPI</div>
+          <div class="rule"></div>
+          <div class="r"><span>2 × Earbuds</span><span>₹2,998</span></div>
+          <div class="r"><span>1 × Notebook A5</span><span>₹149</span></div>
+          <div class="rule"></div>
+          <div class="r"><span>Subtotal</span><span>₹3,147</span></div>
+          <div class="r tot"><span>Total</span><span>₹3,147</span></div>
+          <div class="s">Demo receipt. Not a real transaction.</div>
+          <div class="done">✓ Demo sale complete</div>
+        </div>
+      </div>
+
+      <div id="sh" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>3</b> Stock · Shelf A1</div>
+        <svg id="shsvg" viewBox="0 0 330 150">
+          <path class="wire" id="shelfline" pathLength="1" d="M6 110 H324 M6 20 V110 M324 20 V110" />
+          <rect x="22" y="58" width="44" height="46" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.5" />
+          <rect x="76" y="46" width="44" height="58" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.5" />
+          <rect id="hot" x="130" y="52" width="48" height="52" rx="6" fill="rgba(139,21,56,.35)" stroke="#c9506f" stroke-width="2" />
+          <path d="M138 80 H170 M138 90 H158" stroke="rgba(243,236,230,.8)" stroke-width="1.5" stroke-linecap="round" />
+          <rect x="190" y="60" width="44" height="44" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.5" />
+          <rect x="244" y="44" width="44" height="60" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.5" />
+          <text x="154" y="134" text-anchor="middle" font-size="17" fill="#e9a7b8" font-family="DM Sans">SKU-2081</text>
+        </svg>
+        <div id="shinfo"><b>Earbuds</b>On hand<span id="shnum">14</span></div>
+      </div>
+
+      <div id="lg" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow">Stock ledger · SKU-2081 <span class="tag">Main Store</span></div>
+        <div style="margin-top:18px">
+          <div class="lrow"><span>09:48</span><b>Sale #4819</b><span class="neg-n">−1</span></div>
+          <div class="lrow"><span>10:31</span><b>Sale #4821</b><span class="neg-n">−2</span></div>
+          <div class="lrow new" id="lnew"><span>11:26</span><b>Sale #4822</b><span class="neg-n">−2</span></div>
+          <div class="lrow" id="lbal" style="border-bottom:none"><span></span><span>On hand after</span><b id="lbalv">12</b></div>
+        </div>
+      </div>
+
+      <div id="in" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow">SiBorg · insight</div>
+        <h3>Earbuds are running low.</h3>
+        <ul>
+          <li>12 left, reorder point is 15</li>
+          <li>61 sold in the last 30 days</li>
+          <li>About 6 days of cover</li>
+        </ul>
+        <div class="act" id="act"><b>PO-0184 · Aster Wholesale</b><span>60 units · for review, not sent</span></div>
+      </div>
+
+      <div id="mk" class="panel clip" data-start="0" data-duration="10">
+        <svg id="mksvg" viewBox="26 34 188 212">
+          <g id="orbs"><ellipse class="orb" cx="120" cy="140" rx="94" ry="32" transform="rotate(-24 120 140)" /><ellipse class="orb" cx="120" cy="140" rx="66" ry="92" transform="rotate(14 120 140)" /></g>
+          <g id="mkshapes"></g>
+          <circle id="mkglow" cx="120" cy="140" r="24" fill="#ffe6d4" opacity="0" />
+        </svg>
+        <div id="mklabel"><b>SiBorg</b><div><span id="ms1">Low-stock signal received</span><span id="ms2">Proposal ready for review</span></div></div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const $ = (s) => document.querySelector(s);
+      const NS = 'http://www.w3.org/2000/svg';
+      const mk = (name, attrs, parent) => { const e = document.createElementNS(NS, name); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+
+      /* barcode bars: fixed widths so the render is deterministic */
+      const widths = [3,1,2,1,4,1,1,3,2,1,2,4,1,2,1,3,1,1,2,3,1,2,4,1,1,2,1,3,2,1,1,4,2,1,3,1];
+      const unit = 370 / widths.reduce((a, w) => a + w * 2 + 2.2, 0);
+      let bx = 0; const bars = [];
+      widths.forEach((w) => { bars.push(mk('rect', { class: 'bar', x: (bx * unit).toFixed(2), y: 0, width: (w * 2 * unit).toFixed(2), height: 150 }, $('#bcart'))); bx += w * 2 + 2.2; });
+
+      /* SiBorg mark: same polygons as the website's 2D mark (shared parametric geometry) */
+      const d = window.SB_MEDIUM; const polys = []; let core = null;
+      d.shapes.forEach((s) => {
+        if (s.k === 'face') {
+          core = mk('g', { id: 'mkcore' }, $('#mkshapes'));
+          const defs = mk('defs', {}, core);
+          const rg = mk('radialGradient', { id: 'cg', cx: '.38', cy: '.3', r: '.9' }, defs);
+          [['0', '#fffaf5'], ['.6', '#e9dacf'], ['1', '#a38b80']].forEach((st) => mk('stop', { offset: st[0], 'stop-color': st[1] }, rg));
+          mk('polygon', { points: d.face, fill: 'url(#cg)' }, core);
+          d.eyes.forEach((e) => {
+            mk('ellipse', { cx: e.cx, cy: e.cy, rx: e.w * 2, ry: e.h * 0.78, fill: '#e9a7b8', opacity: '.22' }, core);
+            mk('rect', { x: e.x, y: e.y, width: e.w, height: e.h, rx: e.w / 2, fill: '#fff6ea' }, core);
+          });
+        } else {
+          polys.push(mk('polygon', { points: s.pts, fill: s.fill, stroke: s.fill, 'stroke-width': '.5', 'stroke-linejoin': 'round' }, $('#mkshapes')));
+        }
+      });
+      const lead = mk('path', { class: 'lead', d: 'M150 140 H214', pathLength: '1' }, $('#mksvg'));
+      $('#mkglow').setAttribute('cx', d.cx); $('#mkglow').setAttribute('cy', d.cy);
+
+      const tl = gsap.timeline({ paused: true });
+      const E = 'power3.out';
+      const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+      const int = (n) => String(Math.round(n));
+      function count(el, from, to, at, dur, f) { const o = { v: from }; if (!el.dataset.init) { el.textContent = f(from); el.dataset.init = '1'; } tl.fromTo(o, { v: from }, { v: to, duration: dur, ease: 'power2.out', immediateRender: false, onUpdate: () => { el.textContent = f(o.v); } }, at); }
+      function draw(sel, at, dur, ease) { tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: dur, ease: ease || 'power2.inOut', immediateRender: false }, at); }
+
+      /* initial (also final) state: a near-black canvas with its light source */
+      gsap.set('.wire,#rcline,#shelfline', { strokeDasharray: 1, strokeDashoffset: 1 });
+      gsap.set(['#bc', '#pos', '#sh', '#lg', '#in', '#mk', '#rc'], { opacity: 0 });
+      gsap.set(['.node', '#sig', '#w1', '#w2', '#w3', '#w4', '#w5', '#w6'], { opacity: 0 });
+      gsap.set(['#scan', '#sku', '#digits', '#l2', '#cta', '#lnew', '#lbal', '#act', '#ms2'], { opacity: 0 });
+      gsap.set('#rctext > *', { opacity: 0 });
+      gsap.set('#rcfill', { opacity: 0 });
+      gsap.set(bars, { scaleY: 0, transformOrigin: '50% 100%' });
+      gsap.set(polys, { opacity: 0 }); gsap.set(core, { opacity: 0 }); gsap.set('#orbs', { opacity: 0 });
+      gsap.set(lead, { opacity: 0, strokeDasharray: 1, strokeDashoffset: 1 });
+      gsap.set('#mklabel', { opacity: 0 }); gsap.set('#hot', { opacity: 0 }); gsap.set('#l1', { opacity: 0 });
+
+      /* 0.0 to 1.2  the signal: hairlines draw, a barcode resolves from fine lines */
+      tl.set(['#w1', '#w3'], { opacity: 1 }, 0.1);
+      draw('#w1', 0.15, 1.0); draw('#w3', 0.3, 0.9);
+      tl.to('#bc', { opacity: 1, duration: 0.7, ease: E }, 0.35);
+      tl.to(bars, { scaleY: 1, duration: 0.5, ease: 'power3.out', stagger: 0.012 }, 0.4);
+      tl.to('#digits', { opacity: 1, duration: 0.4 }, 0.9);
+
+      /* 1.2 to 2.5  the scan crosses the code and resolves it into a SKU record */
+      tl.set('#scan', { opacity: 1 }, 1.2);
+      tl.fromTo('#scan', { x: 0 }, { x: 366, duration: 0.8, ease: 'power1.inOut' }, 1.25);
+      tl.to('#scan', { opacity: 0, duration: 0.15 }, 2.05);
+      tl.to(bars, { opacity: 0.45, duration: 0.4 }, 2.05);
+      tl.fromTo('#sku', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 1.9);
+      count($('#q1'), 0, 14, 2.0, 0.5, int);
+      tl.set('#n1', { opacity: 1 }, 2.3);
+
+      /* 2.5 to 4.0  the product enters the sale; quantity, subtotal and total follow */
+      tl.to('#pos', { opacity: 1, duration: 0.6, ease: E }, 2.4);
+      tl.fromTo('#l1', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 2.8);
+      tl.set('#cta', { opacity: 1 }, 2.7);
+      count($('#qv'), 1, 2, 3.2, 0.2, int);
+      tl.fromTo('#qv', { scale: 1.35 }, { scale: 1, duration: 0.3, ease: E }, 3.2);
+      count($('#a1'), 1499, 2998, 3.2, 0.4, fmt);
+      count($('#sub'), 1499, 2998, 3.2, 0.4, fmt);
+      count($('#tot'), 1499, 2998, 3.2, 0.4, fmt);
+      count($('#ctat'), 1499, 2998, 3.2, 0.4, fmt);
+      tl.fromTo('#l2', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 3.45);
+      count($('#sub'), 2998, 3147, 3.55, 0.3, fmt);
+      count($('#tot'), 2998, 3147, 3.55, 0.3, fmt);
+      count($('#ctat'), 2998, 3147, 3.55, 0.3, fmt);
+      tl.to('#payupi', { borderColor: '#c9506f', color: '#f3ece6', backgroundColor: 'rgba(139,21,56,0.35)', duration: 0.25 }, 3.7);
+      tl.fromTo('#cta', { scale: 1 }, { scale: 0.97, duration: 0.12, yoyo: true, repeat: 1, ease: 'power1.inOut' }, 3.9);
+
+      /* 4.0 to 5.3  the receipt draws out of the sale */
+      tl.set(['#w2', '#n2'], { opacity: 1 }, 4.0); draw('#w2', 4.0, 0.45, 'power2.out');
+      tl.to('#rc', { opacity: 1, duration: 0.2 }, 4.3);
+      draw('#rcline', 4.3, 0.9);
+      tl.to('#rcfill', { opacity: 1, duration: 0.3 }, 4.7);
+      tl.to('#rctext > *', { opacity: 1, duration: 0.3, stagger: 0.07 }, 4.55);
+
+      /* 5.3 to 6.8  the same SKU lights on the shelf; the count and the ledger agree */
+      tl.set('#n3', { opacity: 1 }, 5.35); draw('#w3', 5.3, 0.45, 'power2.out');
+      tl.to('#sh', { opacity: 1, duration: 0.5, ease: E }, 5.6);
+      draw('#shelfline', 5.7, 0.7);
+      tl.to('#hot', { opacity: 1, duration: 0.4 }, 6.1);
+      count($('#shnum'), 14, 12, 6.3, 0.5, int);
+      tl.set('#w6', { opacity: 1 }, 6.2); draw('#w6', 6.2, 0.35, 'power2.out');
+      tl.to('#lg', { opacity: 1, duration: 0.5, ease: E }, 6.3);
+      tl.to('#lnew', { opacity: 1, duration: 0.4 }, 6.6);
+      tl.to('#lbal', { opacity: 1, duration: 0.4 }, 6.7);
+
+      /* 6.8 to 8.5  a low-stock signal reaches SiBorg, then an insight with a proposal */
+      tl.set(['#w4', '#n4'], { opacity: 1 }, 6.8);
+      draw('#w4', 6.8, 0.9);
+      const path4 = $('#w4'); const len4 = path4.getTotalLength(); const sg = { p: 0 };
+      tl.set('#sig', { opacity: 1 }, 6.85);
+      tl.fromTo(sg, { p: 0 }, { p: 1, duration: 0.9, ease: 'power2.inOut', onUpdate: () => { const pt = path4.getPointAtLength(sg.p * len4); $('#sig').setAttribute('cx', pt.x); $('#sig').setAttribute('cy', pt.y); } }, 6.8);
+      tl.to('#sig', { opacity: 0, duration: 0.2 }, 7.65);
+      tl.set('#mk', { opacity: 1 }, 7.0);
+      tl.to('#orbs', { opacity: 1, duration: 0.6 }, 7.2);
+      tl.to(polys, { opacity: 1, duration: 0.45, ease: 'power2.out', stagger: 0.006 }, 7.2);
+      tl.to(core, { opacity: 1, duration: 0.5 }, 7.5);
+      tl.to('#mklabel', { opacity: 1, duration: 0.5 }, 7.7);
+      tl.fromTo('#mkglow', { opacity: 0 }, { opacity: 0.8, duration: 0.15 }, 7.85);
+      tl.to('#mkglow', { opacity: 0.1, duration: 0.7, ease: 'power2.out' }, 8.0);
+      tl.set(['#w5', '#n5'], { opacity: 1 }, 7.9); draw('#w5', 7.9, 0.4, 'power2.out');
+      tl.to('#in', { opacity: 1, duration: 0.5, ease: E }, 8.05);
+      tl.to('#act', { opacity: 1, duration: 0.45 }, 8.4);
+            tl.to('#ms1', { opacity: 0, duration: 0.2 }, 8.4); tl.to('#ms2', { opacity: 1, duration: 0.3 }, 8.5);
+
+      /* 8.5 to 9.4 the signature frame holds. 9.45 to 10 everything settles back to the opening canvas, so the loop has no jump */
+      tl.to(['#bc', '#pos', '#rc', '#sh', '#lg', '#in', '#mk', '#wires'], { opacity: 0, duration: 0.5, ease: 'power2.inOut' }, 9.45);
+
+      window.__timelines['main'] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

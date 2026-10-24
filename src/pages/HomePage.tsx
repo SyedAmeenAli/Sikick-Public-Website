@@ -1,20 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { ArrowRight, Shield, Zap, BarChart3, Truck, CreditCard, Lock, Eye, FileText } from 'lucide-react';
-import { useReveal, useScrollSpySteps } from '../lib/motion';
+import { ArrowRight, Shield, Lock, Eye, FileText } from 'lucide-react';
+import { useReveal } from '../lib/motion';
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
-import { DashboardPreview } from '../components/DashboardPreview';
-import { InventoryStoryScene } from '../components/InventoryStoryScene';
+import { ChapterRail, HeroScene, ModuleWalk, WorkflowStory } from '../components/HomeSections';
+import { PosDemo } from '../components/PosDemo';
+import { SiBorgConstellation, SiBorgDemo, SiBorgStage } from '../components/SiBorgExperience';
+import { AnalyticsLineIllustration, BarcodeScanIllustration, IntegrationTopologyIllustration, InventoryShelfIllustration, PosFlowIllustration, StockMovementIllustration, SupplierRouteIllustration } from '../components/hairline/Illustrations';
 import { INDUSTRIES } from '../data/industries';
-
-const modules = [
-  { icon: Truck, title: 'Inventory & catalog', body: 'Products, variants, SKUs, barcodes and stock visibility in one place.', to: '/product/inventory' },
-  { icon: CreditCard, title: 'POS & selling', body: 'Till checkout, orders, quotations, customers and standard returns.', to: '/product/pos' },
-  { icon: Zap, title: 'Purchasing', body: 'Purchase orders, receiving, supplier records and payments.', to: '/product/purchasing' },
-  { icon: BarChart3, title: 'Reports & analytics', body: 'Sales, stock and purchasing visibility for decisions.', to: '/product/reports' },
-];
 
 const coreCapabilities = [
   { title: 'Catalog, variants and barcodes', body: 'Products, categories, variants, auto-generated SKUs and printable barcode labels.' },
@@ -51,7 +46,7 @@ export default function HomePage() {
   const { t } = useTranslation();
   const heroRef = useReveal<HTMLDivElement>();
   useSeo({
-    title: 'Sikick — Know your stock. Move with confidence.',
+    title: 'Sikick — Know what is on the shelf before anyone asks',
     description: 'Inventory, purchasing, POS and business insights connected in one clear system for retail, wholesale, distribution and manufacturing.',
     path: '/',
   });
@@ -62,15 +57,15 @@ export default function HomePage() {
         <div className="container">
           <div
             ref={heroRef}
-            className="reveal hero-stagger"
-            style={{ textAlign: 'center', maxWidth: '52rem', margin: '0 auto var(--space-48)' }}
+            className="reveal hero-stagger hero-text"
+            
           >
             <p className="eyebrow">{t('hero.eyebrow')}</p>
             <h1>{t('hero.title')}</h1>
-            <p className="section-lede" style={{ margin: '0 auto var(--space-32)' }}>
+            <p className="section-lede" style={{ margin: '0 0 var(--space-32)' }}>
               {t('hero.lede')}
             </p>
-            <div style={{ display: 'flex', gap: 'var(--space-12)', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 'var(--space-12)', flexWrap: 'wrap' }}>
               <a className="btn btn-primary" href={SIKICK_TRIAL_URL}>
                 {t('hero.primary')} <span className="btn-arrow" aria-hidden="true">→</span>
               </a>
@@ -83,50 +78,67 @@ export default function HomePage() {
             </p>
           </div>
 
-          <DashboardPreview />
         </div>
+        <HeroScene />
       </section>
 
-      <section className="section section-blush">
+      <ModuleWalk />
+
+      <WorkflowStory />
+
+      <ChapterRail>
+      <section className="section" aria-labelledby="inv-title">
         <div className="container">
-          <div className="section-head section-head-center">
-            <p className="eyebrow">Modules</p>
-            <h2>One system for the work that moves stock.</h2>
-            <p className="section-lede" style={{ margin: '0 auto' }}>
-              Catalog, stock, purchasing, sales and reporting share the same truth, so a change in one place is visible everywhere.
-            </p>
+          <div className="section-head">
+            <p className="eyebrow">01 / Stock</p>
+            <h2 id="inv-title">Every product has a place, a code and a count.</h2>
+            <p className="section-lede">Pick a product on the shelf and follow it to its record. Scan a barcode and watch it resolve to the catalog.</p>
           </div>
-          <div className="grid grid-4">
-            {modules.map((module) => (
-              <Link key={module.title} to={module.to} className="card card-hover module-card">
-                <div className="card-icon">
-                  <module.icon size={20} />
-                </div>
-                <h3>{module.title}</h3>
-                <p>{module.body}</p>
-                <span className="module-link">
-                  {t('common.learnMore')} <ArrowRight size={14} />
-                </span>
-              </Link>
-            ))}
-          </div>
+          <InventoryShelfIllustration />
+          <div style={{ height: 'var(--space-48)' }} />
+          <BarcodeScanIllustration />
         </div>
       </section>
 
-      <InventoryStoryScene />
+      <section className="section section-blush" aria-labelledby="pos-title">
+        <div className="container container-wide">
+          <div className="section-head">
+            <p className="eyebrow">02 / Sell</p>
+            <h2 id="pos-title">A till that sells, and keeps the stock honest.</h2>
+            <p className="section-lede">Try it. Search, add products, change quantities, apply a discount and complete a demo sale. The stock preview moves with it.</p>
+          </div>
+          <PosDemo />
+          <div className="pos-flow-wrap"><PosFlowIllustration /></div>
+          <p className="text-small text-muted" style={{ textAlign: 'center', marginTop: 'var(--space-16)' }}>
+            <Link to="/product/pos">More about POS <ArrowRight size={13} style={{ display: 'inline', verticalAlign: '-2px' }} /></Link>
+          </p>
+        </div>
+      </section>
 
-      <section className="section">
+      <section className="section" aria-labelledby="ops-title">
         <div className="container">
-          <div className="section-head section-head-center">
-            <p className="eyebrow">From stock to sale</p>
-            <h2>Follow one item through the whole system.</h2>
-            <p className="section-lede" style={{ margin: '0 auto' }}>
-              Scroll or pick a step. The companion panel shows the screen that belongs to it.
-            </p>
+          <div className="section-head">
+            <p className="eyebrow">03 / Receive</p>
+            <h2 id="ops-title">Follow stock from the supplier to the shelf.</h2>
+            <p className="section-lede">Step through receiving, then see how a transfer between locations is recorded.</p>
           </div>
-          <StockToSaleStory />
+          <SupplierRouteIllustration />
+          <div style={{ height: 'var(--space-48)' }} />
+          <StockMovementIllustration />
         </div>
       </section>
+
+      <section className="section section-blush" aria-labelledby="an-title">
+        <div className="container">
+          <div className="section-head">
+            <p className="eyebrow">04 / Understand</p>
+            <h2 id="an-title">See the trend before it becomes a problem.</h2>
+            <p className="section-lede">Weekly units sold for the Wireless earbuds at Main Store. Point at any week to read it.</p>
+          </div>
+          <AnalyticsLineIllustration />
+        </div>
+      </section>
+      </ChapterRail>
 
       <section className="section section-blush">
         <div className="container">
@@ -170,35 +182,11 @@ export default function HomePage() {
                 {t('common.learnMore')} <span className="btn-arrow" aria-hidden="true">→</span>
               </Link>
             </div>
-            <div className="ui-frame">
-              <div className="ui-chrome">
-                <span className="ui-chrome-dot" />
-                <span className="ui-chrome-dot" />
-                <span className="ui-chrome-dot" />
-                <span className="ui-chrome-url">SiBorg · reorder review</span>
-                <span className="ui-demo-tag">{t('hero.demo')}</span>
-              </div>
-              <div className="ui-body">
-                <div className="ui-panel ui-siborg">
-                  <div className="ui-panel-title">
-                    <span aria-hidden="true">●</span> Reorder proposal · Wireless earbuds
-                  </div>
-                  <div style={{ display: 'grid', gap: '6px', fontSize: '0.78rem', marginBottom: '10px' }}>
-                    <div><strong style={{ color: '#f7efe9' }}>Suggested:</strong> 60 units</div>
-                    <div><strong style={{ color: '#f7efe9' }}>Because:</strong> 14 days of stock left · lead time 7 days · MOQ 30</div>
-                    <div><strong style={{ color: '#f7efe9' }}>Coverage:</strong> 87% of the last 90 days have sales data</div>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <span className="ui-approve-btn">Approve draft</span>
-                    <span className="ui-ghost-btn">Edit &amp; recalculate</span>
-                  </div>
-                </div>
-                <p className="text-small text-muted" style={{ margin: 0 }}>
-                  {t('hero.demo')} — illustrative. Low-data cases show coverage and fall back to configured rules, with the missing inputs explained.
-                </p>
-              </div>
-            </div>
+            <SiBorgStage />
           </div>
+          <div className="sbd-wrap"><SiBorgDemo /></div>
+          <div style={{ height: 'var(--space-64)' }} />
+          <SiBorgConstellation />
         </div>
       </section>
 
@@ -240,6 +228,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+          <IntegrationTopologyIllustration />
         </div>
       </section>
 
@@ -299,18 +288,18 @@ export default function HomePage() {
               <svg viewBox="0 0 400 260" style={{ width: '100%', maxWidth: 420, height: 'auto' }}>
                 <defs>
                   <linearGradient id="trustGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#fff" />
-                    <stop offset="100%" stopColor="#f5e8ea" />
+                    <stop offset="0%" stopColor="#2a1c22" />
+                    <stop offset="100%" stopColor="#1a1316" />
                   </linearGradient>
                 </defs>
-                <rect x="40" y="40" width="320" height="180" rx="16" fill="url(#trustGrad)" stroke="#e8dde0" />
-                <rect x="70" y="80" width="180" height="20" rx="4" fill="#f5e8ea" />
-                <rect x="70" y="110" width="140" height="14" rx="3" fill="#f5e8ea" />
-                <rect x="70" y="132" width="160" height="14" rx="3" fill="#f5e8ea" />
-                <rect x="70" y="154" width="120" height="14" rx="3" fill="#f5e8ea" />
-                <circle cx="320" cy="100" r="24" fill="#8b1538" opacity="0.12" />
-                <path d="M310 100 L318 108 L332 92" stroke="#8b1538" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                <text x="320" y="140" textAnchor="middle" fill="#8b1538" fontSize="10" fontWeight="700">Verified</text>
+                <rect x="40" y="40" width="320" height="180" rx="16" fill="url(#trustGrad)" stroke="rgba(243,236,230,0.2)" />
+                <rect x="70" y="80" width="180" height="20" rx="4" fill="rgba(243,236,230,0.1)" />
+                <rect x="70" y="110" width="140" height="14" rx="3" fill="rgba(243,236,230,0.1)" />
+                <rect x="70" y="132" width="160" height="14" rx="3" fill="rgba(243,236,230,0.1)" />
+                <rect x="70" y="154" width="120" height="14" rx="3" fill="rgba(243,236,230,0.1)" />
+                <circle cx="320" cy="100" r="24" fill="#d9708b" opacity="0.12" />
+                <path d="M310 100 L318 108 L332 92" stroke="#d9708b" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                <text x="320" y="140" textAnchor="middle" fill="#d9708b" fontSize="10" fontWeight="700">Verified</text>
               </svg>
             </div>
           </div>
@@ -365,69 +354,6 @@ export default function HomePage() {
         .module-card:hover .module-link, .module-card:focus-visible .module-link { opacity: 1; transform: none; }
         .trust-visual { display: grid; place-items: center; }
       `}</style>
-    </div>
-  );
-}
-
-function StockToSaleStory() {
-  const { t } = useTranslation();
-  const { active, setActive, stepsRef } = useScrollSpySteps(5);
-  const steps = [
-    { title: 'Add or import a catalog', body: 'Products, categories, variants, SKUs and barcodes — imported from a spreadsheet or entered by hand.' },
-    { title: 'Receive goods and record stock', body: 'Purchase orders are received line by line; the stock ledger updates with on-hand, reserved and damaged quantities.' },
-    { title: 'Sell, reserve or fulfil an order', body: 'POS checkout, quotations and sales orders all draw from the same stock truth.' },
-    { title: 'Reorder with stock and supplier context', body: 'SiBorg drafts reviewable reorder quantities from your own sales, lead times and stock in transit.' },
-    { title: 'Review outcomes in reports', body: 'Sales, stock and purchase reports — plus interactive dashboards and insights in the AI plan.' },
-  ];
-  const screens = [
-    { title: 'Catalog', rows: ['SKU-1042 · Cotton T-shirt', 'SKU-2081 · Wireless earbuds', 'SKU-3310 · Ceramic mug'] },
-    { title: 'Receiving', rows: ['PO-0182 · 240 units received', 'PO-0183 · pending 60 units', 'Damaged: 2 units'] },
-    { title: 'Sale', rows: ['Order #4821 · 3 items', 'Tender: UPI ₹1,240', 'Reserved: 1 unit'] },
-    { title: 'Reorder', rows: ['Earbuds · suggest 60', 'Coverage 87% · medium', 'Approve draft'] },
-    { title: 'Reports', rows: ['Sales (sample): ₹4.8L', 'Low stock: 17 items', 'Slow movers: 6 SKUs'] },
-  ];
-  const screen = screens[active] ?? screens[0];
-  return (
-    <div className="story">
-      <div ref={stepsRef} className="story-steps">
-        {steps.map((step, index) => (
-          <button
-            key={step.title}
-            type="button"
-            className="story-step"
-            data-step-index={index}
-            data-active={active === index}
-            onClick={() => setActive(index)}
-          >
-            <span className="story-step-num">Step {index + 1}</span>
-            <h3>{step.title}</h3>
-            {active === index && <p>{step.body}</p>}
-          </button>
-        ))}
-      </div>
-      <div className="story-visual">
-        <div className="story-visual-sticky">
-          <div className="ui-frame">
-            <div className="ui-chrome">
-              <span className="ui-chrome-dot" />
-              <span className="ui-chrome-dot" />
-              <span className="ui-chrome-dot" />
-              <span className="ui-chrome-url">sikick · {screen.title.toLowerCase()}</span>
-              <span className="ui-demo-tag">{t('hero.demo')}</span>
-            </div>
-            <div className="ui-body">
-              <div className="ui-topbar">
-                <span className="ui-topbar-title">{screen.title}</span>
-              </div>
-              {screen.rows.map((row) => (
-                <div className="ui-row" key={row}>
-                  <span className="ui-name">{row}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

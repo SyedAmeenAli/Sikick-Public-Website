@@ -4,7 +4,7 @@ import { useReveal } from '../lib/motion';
 const metrics = [
   { label: 'SKUs in stock', target: 1284, suffix: '', sub: '+2.4% vs last month', tone: 'good' },
   { label: 'Low-stock items', target: 17, suffix: '', sub: 'Needs attention', tone: 'warn' },
-  { label: 'Sales (sample)', target: 480000, suffix: '₹', sub: '+11% vs last month', tone: 'good', currency: true },
+  { label: 'Sales today', target: 480000, suffix: '₹', sub: '+11% vs last month', tone: 'good', currency: true },
   { label: 'Purchase orders open', target: 9, suffix: '', sub: '3 overdue', tone: 'neutral' },
 ];
 
@@ -61,13 +61,13 @@ export function DashboardPreview() {
   };
 
   return (
-    <div ref={ref} className="ui-frame dashboard-preview" aria-label="Sikick dashboard preview (sample data)">
+    <div ref={ref} className="ui-frame dashboard-preview" aria-label="Sikick dashboard preview">
       <div className="ui-chrome">
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-dot" />
         <span className="ui-chrome-url">app.sikick.com · dashboard</span>
-        <span className="ui-demo-tag">Sample data</span>
+        <span className="ui-demo-tag">Morrow Goods</span>
       </div>
       <div className="ui-body">
         <div className="ui-topbar">
@@ -122,52 +122,6 @@ export function DashboardPreview() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Floating contextual panels */}
-      <div
-        className="dashboard-float-panel float-low-stock"
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          right: '-24px',
-          top: '28%',
-          background: '#fff',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-md)',
-          padding: '10px 14px',
-          boxShadow: 'var(--shadow-md)',
-          fontSize: '0.78rem',
-          opacity: 0,
-          transform: 'translateY(12px)',
-          animation: 'floatIn 600ms 400ms forwards',
-          pointerEvents: 'none',
-        }}
-      >
-        <div style={{ fontWeight: 700, color: 'var(--accent)' }}>17 items</div>
-        <div style={{ color: 'var(--text-muted)' }}>need attention</div>
-      </div>
-      <div
-        className="dashboard-float-panel float-sale"
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          left: '-20px',
-          bottom: '18%',
-          background: '#fff',
-          border: '1px solid var(--border)',
-          borderRadius: 'var(--radius-md)',
-          padding: '10px 14px',
-          boxShadow: 'var(--shadow-md)',
-          fontSize: '0.78rem',
-          opacity: 0,
-          transform: 'translateY(12px)',
-          animation: 'floatIn 600ms 700ms forwards',
-          pointerEvents: 'none',
-        }}
-      >
-        <div style={{ fontWeight: 700, color: 'var(--sikick-success)' }}>+11%</div>
-        <div style={{ color: 'var(--text-muted)' }}>vs last month</div>
       </div>
 
       <style>{`

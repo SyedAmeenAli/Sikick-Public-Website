@@ -39,19 +39,16 @@
   "nav.resources.contact": "Contact",
   "nav.industries.browse": "Browse 78 sectors",
   "nav.industries.browse.desc": "Inventory software for the way your industry works.",
-
-  "hero.eyebrow": "Inventory, sales and operations",
-  "hero.title": "Know your stock. Move with confidence.",
-  "hero.lede": "Products, purchasing, POS and business insights — connected in one clear system.",
+  "hero.eyebrow": "Inventory, sales and purchasing",
+  "hero.title": "Know what is on the shelf before anyone asks.",
+  "hero.lede": "A scan, a sale and a reorder should all describe the same item. Sikick keeps the catalog, the till and the purchase orders on one stock count, so the number you see is the number you have.",
   "hero.primary": "Start a 14-day trial",
   "hero.secondary": "Explore the platform",
   "hero.note": "No payment method required.",
-  "hero.demo": "Sample data",
-
+  "hero.demo": "Morrow Goods",
   "cta.final.title": "See your stock clearly.",
   "cta.final.lede": "Start a 14-day trial of Core or AI, or design your setup in the configurator — no payment method required.",
   "cta.final.configurator": "Design my setup",
-
   "footer.tagline": "Inventory, purchasing, POS and business insights — connected in one clear system for retail, wholesale, distribution and manufacturing.",
   "footer.product": "Product",
   "footer.solutions": "Solutions",
@@ -63,7 +60,6 @@
   "footer.language": "Language",
   "footer.app": "Open the app",
   "footer.pos": "POS terminal",
-
   "pricing.title": "Simple plans, honest prices.",
   "pricing.lede": "Prices below are base subscription prices. Applicable GST is calculated at checkout and itemized on your invoice.",
   "pricing.monthly": "Monthly",
@@ -78,7 +74,6 @@
   "pricing.aiTagline": "Operations + SiBorg intelligence",
   "pricing.entTagline": "Governance and customization",
   "pricing.gstNote": "Base price excludes applicable GST; tax is calculated and itemized at checkout.",
-
   "config.title": "Design your setup",
   "config.step.business": "Business type",
   "config.step.needs": "What you need",
@@ -91,7 +86,6 @@
   "config.email": "Email my blueprint",
   "config.editAnswers": "Edit answers",
   "config.assistantNote": "This assistant follows a transparent rules-based flow — no personal or business data leaves your browser.",
-
   "form.name": "Full name",
   "form.email": "Work email",
   "form.company": "Company",
@@ -108,11 +102,10 @@
   "form.consentRequired": "Please agree to be contacted about this request.",
   "form.sending": "Submitting…",
   "form.sendError": "Could not submit. Please try again.",
-
   "common.readMore": "Read more",
   "common.explore": "Explore",
   "common.learnMore": "Learn more",
-  "common.sample": "Sample data",
+  "common.sample": "Morrow Goods",
   "common.notFound.title": "Page not found",
   "common.notFound.body": "The page you asked for does not exist. Try the directory, pricing or the configurator.",
   "common.notFound.home": "Back to home"

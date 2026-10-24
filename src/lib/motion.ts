@@ -95,3 +95,101 @@ export function useScrolled(threshold = 8): boolean {
   }, [threshold]);
   return scrolled;
 }
+
+/**
+ * Scroll progress (0..1) of an element. 'through': 0 when its top meets the
+ * viewport bottom, 1 when its bottom leaves the top. 'sticky': 0 when its top
+ * reaches the viewport top, 1 when its bottom reaches the viewport bottom
+ * (for tall wrappers that contain a sticky stage). Writes `--p` on the element
+ * (no React re-render) and optionally reports the value. One passive listener
+ * and rAF throttling; cleaned up on unmount.
+ */
+export function useScrollProgress<T extends HTMLElement>(
+  onProgress?: (progress: number) => void,
+  mode: 'through' | 'sticky' | 'leave' = 'through',
+): RefObject<T | null> {
+  const ref = useRef<T | null>(null);
+  const cb = useRef(onProgress);
+  cb.current = onProgress;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion()) {
+      el.style.setProperty('--p', mode === 'sticky' ? '1' : mode === 'leave' ? '0' : '0.5');
+      return;
+    }
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      let p: number;
+      if (mode === 'sticky') {
+        const total = rect.height - vh;
+        p = total <= 0 ? 1 : -rect.top / total;
+      } else if (mode === 'leave') {
+        p = -rect.top / Math.max(1, rect.height);
+      } else {
+        p = (vh - rect.top) / (vh + rect.height);
+      }
+      p = Math.min(1, Math.max(0, p));
+      el.style.setProperty('--p', p.toFixed(4));
+      cb.current?.(p);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [mode]);
+
+  return ref;
+}
+
+/** True once the element has been in view; stays true (play-once draw animations). */
+export function useInView<T extends HTMLElement>(threshold = 0.25): [RefObject<T | null>, boolean] {
+  const ref = useRef<T | null>(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (prefersReducedMotion() || typeof IntersectionObserver === 'undefined') {
+      setSeen(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setSeen(true);
+          observer.disconnect();
+        }
+      },
+      { threshold },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return [ref, seen];
+}
+
+/** Subscribes to a media query; used to swap pinned desktop sequences for touch-friendly ones. */
+export function useMedia(query: string): boolean {
+  const get = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(query).matches;
+  const [match, setMatch] = useState(get);
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const mq = window.matchMedia(query);
+    const on = () => setMatch(mq.matches);
+    on();
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, [query]);
+  return match;
+}

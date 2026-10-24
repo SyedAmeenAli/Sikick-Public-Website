@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useSeo } from '../lib/seo';
+import { IntegrationTopologyIllustration } from '../components/hairline/Illustrations';
 
 type Integration = {
   name: string;
@@ -92,6 +93,12 @@ export default function IntegrationsPage() {
           </p>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <IntegrationTopologyIllustration />
+        </div>
+      </section>
+
 
       <section className="section section-blush" style={{ paddingTop: 0 }}>
         <div className="container">

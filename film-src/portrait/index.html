@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="./gsap.min.js"></script>
+    <script src="./mark-data.js"></script>
+    <style>
+      @font-face { font-family: 'DM Sans'; font-weight: 400; src: url('./fonts/dm-sans-latin-400-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'DM Sans'; font-weight: 500; src: url('./fonts/dm-sans-latin-500-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'DM Sans'; font-weight: 600; src: url('./fonts/dm-sans-latin-600-normal.woff2') format('woff2'); }
+      @font-face { font-family: 'Newsreader'; font-weight: 500; src: url('./fonts/newsreader-latin-500-normal.woff2') format('woff2'); }
+      :root { --ground: #0d0a0c; --ink: #f3ece6; --muted: #a99da2; --wine: #8b1538; --rose: #e9a7b8; --line: rgba(243,236,230,.82); --line-dim: rgba(243,236,230,.3); --panel: rgba(23,17,20,.9); --edge: rgba(243,236,230,.18); --ok: #7fc8a4; --warn: #e0a55c; --body: 'DM Sans', system-ui, sans-serif; --disp: 'Newsreader', Georgia, serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: var(--body); color: var(--ink); background: var(--ground); }
+      .light { position: absolute; inset: 0; background: radial-gradient(ellipse 800px 700px at 88% 6%, rgba(139,21,56,.34), transparent 70%), radial-gradient(ellipse 900px 700px at 0% 100%, rgba(90,8,27,.24), transparent 70%); }
+      .wire { fill: none; stroke: var(--line); stroke-width: 2; stroke-linecap: round; }
+      .wire.hot { stroke: #c9506f; }
+      .node { fill: var(--ground); stroke: #c9506f; stroke-width: 2; }
+      #wires { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+
+      #track { position: absolute; left: 60px; top: 96px; width: 960px; display: flex; justify-content: space-between; font-size: 30px; font-weight: 500; color: var(--muted); }
+      #track span { display: flex; align-items: center; gap: 12px; }
+      #track b { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--line-dim); font-size: 22px; }
+      #trackline { position: absolute; left: 60px; top: 168px; width: 960px; height: 2px; background: var(--edge); }
+      #trackfill { position: absolute; left: 60px; top: 168px; width: 960px; height: 2px; background: #c9506f; transform-origin: left; }
+
+      .panel { position: absolute; background: var(--panel); border: 2px solid var(--edge); border-radius: 36px; padding: 52px; box-shadow: 0 40px 80px -40px rgba(0,0,0,.85), inset 0 1px 0 rgba(243,236,230,.1); }
+      .eyebrow { display: flex; align-items: center; gap: 18px; font-size: 34px; color: var(--muted); font-weight: 500; }
+      .eyebrow b { display: inline-grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--rose); color: var(--rose); font-size: 26px; font-weight: 600; }
+      .tag { margin-left: auto; font-size: 28px; color: var(--rose); border: 2px solid rgba(233,167,184,.5); border-radius: 999px; padding: 4px 22px; }
+
+      #bc { left: 60px; top: 300px; width: 960px; height: 840px; }
+      #bcart { position: absolute; left: 56px; top: 150px; width: 848px; height: 340px; }
+      #bcart rect.bar { fill: var(--ink); }
+      #scan { position: absolute; left: 56px; top: 130px; width: 7px; height: 380px; background: #e9a7b8; box-shadow: 0 0 24px 4px rgba(201,80,111,.65); border-radius: 4px; }
+      #digits { position: absolute; left: 56px; top: 510px; width: 848px; text-align: center; font-size: 34px; letter-spacing: .24em; color: var(--muted); }
+      #sku { position: absolute; left: 56px; top: 596px; width: 848px; }
+      #sku .name { font-family: var(--disp); font-size: 92px; line-height: 1.05; }
+      #sku .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; font-size: 40px; color: var(--muted); }
+      #sku .meta b { color: var(--ink); font-weight: 500; }
+      .stockpill { display: inline-flex; gap: 12px; font-size: 38px; color: var(--warn); border: 2px solid rgba(224,165,92,.55); border-radius: 999px; padding: 8px 28px; }
+
+      #pos { left: 60px; top: 280px; width: 960px; height: 1340px; }
+      .posbar { display: flex; align-items: center; gap: 24px; margin-top: 34px; }
+      .search { flex: 1; border: 2px solid var(--edge); border-radius: 999px; padding: 20px 36px; font-size: 36px; color: var(--muted); }
+      .line { display: grid; grid-template-columns: 1fr auto 190px; align-items: center; gap: 28px; padding: 30px 0; border-bottom: 2px solid var(--edge); font-size: 46px; }
+      .line small { display: block; font-size: 32px; color: var(--muted); }
+      .qty { display: inline-flex; align-items: center; gap: 22px; border: 2px solid var(--edge); border-radius: 999px; padding: 8px 26px; font-size: 42px; }
+      .qty i { font-style: normal; color: var(--muted); }
+      .amt { text-align: right; font-weight: 500; }
+      #cart { margin-top: 24px; height: 360px; }
+      .sum { margin-top: 20px; display: grid; gap: 16px; font-size: 40px; color: var(--muted); }
+      .sum div { display: flex; justify-content: space-between; }
+      .sum .total { margin-top: 10px; padding-top: 24px; border-top: 2px solid var(--edge); color: var(--ink); font-size: 72px; font-weight: 600; }
+      .pay { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 32px; }
+      .pay span { text-align: center; padding: 18px 0; border: 2px solid var(--edge); border-radius: 24px; font-size: 38px; color: var(--muted); }
+      .cta { margin-top: 32px; text-align: center; background: var(--wine); color: #fff; border-radius: 999px; padding: 30px 0; font-size: 44px; font-weight: 600; }
+
+      #rc { left: 150px; top: 300px; width: 780px; height: 800px; background: transparent; border: none; box-shadow: none; padding: 0; }
+      #rcsvg { position: absolute; inset: 0; width: 780px; height: 800px; overflow: visible; }
+      #rcfill { fill: rgba(243,236,230,.08); }
+      #rcline { fill: none; stroke: var(--line); stroke-width: 2; stroke-linejoin: round; }
+      #rctext { position: absolute; left: 60px; right: 60px; top: 60px; font-size: 38px; display: grid; gap: 18px; }
+      #rctext .t { font-weight: 600; font-size: 48px; }
+      #rctext .s { color: var(--muted); font-size: 32px; }
+      #rctext .r { display: flex; justify-content: space-between; gap: 16px; }
+      #rctext .rule { border-top: 2px dashed var(--line-dim); margin: 10px 0; }
+      #rctext .tot { font-weight: 600; font-size: 54px; }
+      .stamp { justify-self: start; font-size: 28px; font-weight: 600; color: var(--rose); border: 2px solid var(--rose); border-radius: 10px; padding: 2px 18px; }
+      .done { color: var(--ok); font-size: 36px; font-weight: 500; }
+
+      #sh { left: 60px; top: 300px; width: 960px; height: 640px; }
+      #shsvg { position: absolute; left: 40px; top: 150px; width: 560px; height: 254px; }
+      #shinfo { position: absolute; right: 52px; top: 150px; width: 270px; font-size: 34px; color: var(--muted); line-height: 1.4; }
+      #shinfo b { color: var(--ink); font-weight: 500; display: block; font-size: 40px; }
+      #shnum { font-family: var(--disp); font-size: 130px; color: var(--ink); line-height: 1; margin-top: 14px; display: block; }
+      #lg { left: 60px; top: 1000px; width: 960px; height: 700px; }
+      .lrow { display: grid; grid-template-columns: 130px 1fr auto; gap: 18px; font-size: 38px; padding: 28px 18px; margin: 0 -18px; border-bottom: 2px solid var(--edge); color: var(--muted); }
+      .lrow b { color: var(--ink); font-weight: 500; }
+      .lrow.new { background: rgba(139,21,56,.3); border-radius: 22px; border-bottom-color: transparent; color: var(--ink); }
+      .pos-n { color: var(--ok); } .neg-n { color: var(--rose); }
+
+      #mk { left: 190px; top: 250px; width: 700px; height: 880px; background: transparent; border: none; box-shadow: none; padding: 0; }
+      #mksvg { position: absolute; left: 50px; top: 0; width: 600px; height: 660px; overflow: visible; }
+      #mklabel { position: absolute; left: 0; right: 0; top: 670px; text-align: center; }
+      #mklabel b { font-family: var(--disp); font-weight: 500; font-size: 72px; }
+      #in { left: 60px; top: 1110px; width: 960px; height: 640px; padding: 48px; }
+      #in h3 { font-family: var(--disp); font-weight: 500; font-size: 72px; line-height: 1.05; margin: 22px 0 26px; }
+      #in ul { list-style: none; display: grid; gap: 14px; font-size: 38px; color: var(--muted); }
+      #in li { padding-left: 32px; position: relative; }
+      #in li::before { content: ''; position: absolute; left: 0; top: 22px; width: 12px; height: 12px; border-radius: 50%; background: var(--rose); }
+      #in .act { margin-top: 30px; border: 2px solid #c9506f; border-radius: 28px; padding: 22px 28px; background: rgba(139,21,56,.3); font-size: 36px; }
+      #in .act b { display: block; font-size: 42px; font-weight: 600; }
+      #in .act span { color: var(--muted); font-size: 32px; }
+      .orb { fill: none; stroke: var(--rose); stroke-width: .9; opacity: .5; }
+
+      #cap { position: absolute; left: 60px; right: 60px; top: 1810px; height: 60px; font-size: 36px; color: var(--muted); text-align: center; }
+      #cap span { position: absolute; left: 0; right: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+      <div class="light clip" data-start="0" data-duration="10"></div>
+      <div id="trackline" class="clip" data-start="0" data-duration="10"></div>
+      <div id="trackfill" class="clip" data-start="0" data-duration="10"></div>
+      <div id="track" class="clip" data-start="0" data-duration="10"><span id="t1"><b>1</b>Scan</span><span id="t2"><b>2</b>Sale</span><span id="t3"><b>3</b>Receipt</span><span id="t4"><b>4</b>Stock</span><span id="t5"><b>5</b>SiBorg</span></div>
+
+      <svg id="wires" class="clip" data-start="0" data-duration="10" viewBox="0 0 1080 1920">
+        <path id="w1" class="wire" pathLength="1" d="M540 940 V1000" />
+        <path id="w2" class="wire hot" pathLength="1" d="M540 1000 V1110" />
+        <circle id="n1" class="node" cx="540" cy="940" r="9" />
+        <circle id="n2" class="node" cx="540" cy="1000" r="9" />
+      </svg>
+
+      <div id="bc" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>1</b> Scan <span class="tag">Main Store</span></div>
+        <svg id="bcart" viewBox="0 0 370 150" preserveAspectRatio="none"></svg>
+        <div id="scan"></div>
+        <div id="digits">8 901234 567897</div>
+        <div id="sku"><div class="name">Wireless earbuds</div><div class="meta"><span>SKU-2081 · <b>₹1,499</b></span><span class="stockpill"><span id="q1">14</span> in stock</span></div></div>
+      </div>
+
+      <div id="pos" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>2</b> Sale <span class="tag">Main Store</span></div>
+        <div class="posbar"><div class="search">Search name or scan SKU</div></div>
+        <div style="margin-top:22px;font-size:34px;color:var(--muted)">Sale #4822</div>
+        <div id="cart">
+          <div class="line" id="l1"><div>Wireless earbuds<small>SKU-2081 · ₹1,499 each</small></div><div class="qty"><i>−</i><span id="qv">1</span><i>+</i></div><div class="amt" id="a1">₹1,499</div></div>
+          <div class="line" id="l2"><div>Notebook A5<small>SKU-4120 · ₹149 each</small></div><div class="qty"><i>−</i><span>1</span><i>+</i></div><div class="amt">₹149</div></div>
+        </div>
+        <div class="sum"><div><span>Subtotal</span><span id="sub">₹1,499</span></div><div class="total"><span>Total</span><span id="tot">₹1,499</span></div></div>
+        <div class="pay"><span>Cash</span><span id="payupi">UPI</span><span>QR</span></div>
+        <div class="cta" id="cta">Complete demo sale · <span id="ctat">₹1,499</span></div>
+      </div>
+
+      <div id="rc" class="panel clip" data-start="0" data-duration="10">
+        <svg id="rcsvg" viewBox="0 0 780 800">
+          <path id="rcfill" d="M0 0 H780 V775 L750 750 L720 775 L690 750 L660 775 L630 750 L600 775 L570 750 L540 775 L510 750 L480 775 L450 750 L420 775 L390 750 L360 775 L330 750 L300 775 L270 750 L240 775 L210 750 L180 775 L150 750 L120 775 L90 750 L60 775 L30 750 L0 775 Z" />
+          <path id="rcline" pathLength="1" d="M0 0 H780 V775 L750 750 L720 775 L690 750 L660 775 L630 750 L600 775 L570 750 L540 775 L510 750 L480 775 L450 750 L420 775 L390 750 L360 775 L330 750 L300 775 L270 750 L240 775 L210 750 L180 775 L150 750 L120 775 L90 750 L60 775 L30 750 L0 775 Z" />
+        </svg>
+        <div id="rctext">
+          <span class="stamp">Demo receipt</span>
+          <div class="t">Morrow Goods</div>
+          <div class="s">Till 2 · Sale #4822 · UPI</div>
+          <div class="rule"></div>
+          <div class="r"><span>2 × Earbuds</span><span>₹2,998</span></div>
+          <div class="r"><span>1 × Notebook A5</span><span>₹149</span></div>
+          <div class="rule"></div>
+          <div class="r"><span>Subtotal</span><span>₹3,147</span></div>
+          <div class="r tot"><span>Total</span><span>₹3,147</span></div>
+          <div class="s">Demo receipt. Not a real transaction.</div>
+          <div class="done">✓ Demo sale complete</div>
+        </div>
+      </div>
+
+      <div id="sh" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow"><b>4</b> Stock · Shelf A1</div>
+        <svg id="shsvg" viewBox="0 0 330 150">
+          <path class="wire" id="shelfline" pathLength="1" d="M6 110 H324 M6 20 V110 M324 20 V110" style="stroke-width:1.2" />
+          <rect x="22" y="58" width="44" height="46" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.3" />
+          <rect x="76" y="46" width="44" height="58" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.3" />
+          <rect id="hot" x="130" y="52" width="48" height="52" rx="6" fill="rgba(139,21,56,.35)" stroke="#c9506f" stroke-width="1.8" />
+          <path d="M138 80 H170 M138 90 H158" stroke="rgba(243,236,230,.8)" stroke-width="1.3" stroke-linecap="round" />
+          <rect x="190" y="60" width="44" height="44" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.3" />
+          <rect x="244" y="44" width="44" height="60" rx="4" fill="none" stroke="rgba(243,236,230,.5)" stroke-width="1.3" />
+          <text x="154" y="134" text-anchor="middle" font-size="15" fill="#e9a7b8" font-family="DM Sans">SKU-2081</text>
+        </svg>
+        <div id="shinfo"><b>Earbuds</b>On hand<span id="shnum">14</span></div>
+      </div>
+
+      <div id="lg" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow">Stock ledger · SKU-2081 <span class="tag">Main Store</span></div>
+        <div style="margin-top:30px">
+          <div class="lrow"><span>09:48</span><b>Sale #4819</b><span class="neg-n">−1</span></div>
+          <div class="lrow"><span>10:31</span><b>Sale #4821</b><span class="neg-n">−2</span></div>
+          <div class="lrow new" id="lnew"><span>11:26</span><b>Sale #4822</b><span class="neg-n">−2</span></div>
+          <div class="lrow" id="lbal" style="border-bottom:none"><span></span><span>On hand after</span><b>12</b></div>
+        </div>
+      </div>
+
+      <div id="mk" class="panel clip" data-start="0" data-duration="10">
+        <svg id="mksvg" viewBox="26 34 188 212">
+          <g id="orbs"><ellipse class="orb" cx="120" cy="140" rx="94" ry="32" transform="rotate(-24 120 140)" /><ellipse class="orb" cx="120" cy="140" rx="66" ry="92" transform="rotate(14 120 140)" /></g>
+          <g id="mkshapes"></g>
+          <circle id="mkglow" cx="120" cy="140" r="24" fill="#ffe6d4" opacity="0" />
+        </svg>
+        <div id="mklabel"><b>SiBorg</b></div>
+      </div>
+
+      <div id="in" class="panel clip" data-start="0" data-duration="10">
+        <div class="eyebrow">SiBorg · insight</div>
+        <h3>Earbuds are running low.</h3>
+        <ul><li>12 left, reorder point is 15</li><li>61 sold in the last 30 days</li><li>About 6 days of cover</li></ul>
+        <div class="act" id="act"><b>PO-0184 · Aster Wholesale</b><span>60 units · for review, not sent</span></div>
+      </div>
+
+      <div id="cap" class="clip" data-start="0" data-duration="10">
+        <span id="c1">A barcode is read and matched to its SKU.</span>
+        <span id="c2">The product joins a sale. Totals follow.</span>
+        <span id="c3">The receipt draws out of the sale.</span>
+        <span id="c4">The same SKU drops from 14 to 12 on the shelf.</span>
+        <span id="c5">SiBorg flags the low stock and proposes a draft.</span>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const $ = (s) => document.querySelector(s);
+      const NS = 'http://www.w3.org/2000/svg';
+      const mk = (name, attrs, parent) => { const e = document.createElementNS(NS, name); Object.keys(attrs).forEach((k) => e.setAttribute(k, attrs[k])); if (parent) parent.appendChild(e); return e; };
+
+      const widths = [3,1,2,1,4,1,1,3,2,1,2,4,1,2,1,3,1,1,2,3,1,2,4,1,1,2,1,3,2,1,1,4,2,1,3,1];
+      const unit = 370 / widths.reduce((a, w) => a + w * 2 + 2.2, 0);
+      let bx = 0; const bars = [];
+      widths.forEach((w) => { bars.push(mk('rect', { class: 'bar', x: (bx * unit).toFixed(2), y: 0, width: (w * 2 * unit).toFixed(2), height: 150 }, $('#bcart'))); bx += w * 2 + 2.2; });
+
+      const d = window.SB_MEDIUM; const polys = []; let core = null;
+      d.shapes.forEach((s) => {
+        if (s.k === 'face') {
+          core = mk('g', { id: 'mkcore' }, $('#mkshapes'));
+          const defs = mk('defs', {}, core);
+          const rg = mk('radialGradient', { id: 'cg', cx: '.38', cy: '.3', r: '.9' }, defs);
+          [['0', '#fffaf5'], ['.6', '#e9dacf'], ['1', '#a38b80']].forEach((st) => mk('stop', { offset: st[0], 'stop-color': st[1] }, rg));
+          mk('polygon', { points: d.face, fill: 'url(#cg)' }, core);
+          d.eyes.forEach((e) => {
+            mk('ellipse', { cx: e.cx, cy: e.cy, rx: e.w * 2, ry: e.h * 0.78, fill: '#e9a7b8', opacity: '.22' }, core);
+            mk('rect', { x: e.x, y: e.y, width: e.w, height: e.h, rx: e.w / 2, fill: '#fff6ea' }, core);
+          });
+        } else {
+          polys.push(mk('polygon', { points: s.pts, fill: s.fill, stroke: s.fill, 'stroke-width': '.5', 'stroke-linejoin': 'round' }, $('#mkshapes')));
+        }
+      });
+      $('#mkglow').setAttribute('cx', d.cx); $('#mkglow').setAttribute('cy', d.cy);
+
+      const tl = gsap.timeline({ paused: true });
+      const E = 'power3.out';
+      const fmt = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+      const int = (n) => String(Math.round(n));
+      function count(el, from, to, at, dur, f) { const o = { v: from }; if (!el.dataset.init) { el.textContent = f(from); el.dataset.init = '1'; } tl.fromTo(o, { v: from }, { v: to, duration: dur, ease: 'power2.out', immediateRender: false, onUpdate: () => { el.textContent = f(o.v); } }, at); }
+      function draw(sel, at, dur, ease) { tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: dur, ease: ease || 'power2.inOut', immediateRender: false }, at); }
+
+      gsap.set('.wire,#rcline,#shelfline', { strokeDasharray: 1, strokeDashoffset: 1 });
+      gsap.set(['#bc', '#pos', '#sh', '#lg', '#in', '#mk', '#rc', '#cap span', '#trackline', '#track', '.node', '#w1', '#w2'], { opacity: 0 });
+      gsap.set('#trackfill', { scaleX: 0 });
+      gsap.set(['#scan', '#sku', '#digits', '#l2', '#lnew', '#lbal', '#act'], { opacity: 0 });
+      gsap.set('#rctext > *', { opacity: 0 }); gsap.set('#rcfill', { opacity: 0 });
+      gsap.set(bars, { scaleY: 0, transformOrigin: '50% 100%' });
+      gsap.set(polys, { opacity: 0 }); gsap.set(core, { opacity: 0 }); gsap.set('#orbs', { opacity: 0 });
+      gsap.set('#mklabel', { opacity: 0 }); gsap.set('#hot', { opacity: 0 }); gsap.set('#l1', { opacity: 0 });
+
+      const chip = (n, at) => { tl.to('#t' + n, { color: '#f3ece6', duration: 0.3 }, at); tl.to('#t' + n + ' b', { borderColor: '#e9a7b8', color: '#e9a7b8', duration: 0.3 }, at); };
+      const cap = (n, at, out) => { tl.to('#c' + n, { opacity: 1, duration: 0.35 }, at); if (out) tl.to('#c' + n, { opacity: 0, duration: 0.25 }, out); };
+
+      /* 0.0-1.2 signal: tracker hairline and a barcode resolving */
+      tl.to(['#trackline', '#track'], { opacity: 1, duration: 0.6 }, 0.2);
+      tl.to('#bc', { opacity: 1, duration: 0.7, ease: E }, 0.35);
+      tl.to(bars, { scaleY: 1, duration: 0.5, ease: 'power3.out', stagger: 0.012 }, 0.4);
+      tl.to('#digits', { opacity: 1, duration: 0.4 }, 0.9);
+      chip(1, 0.6); cap(1, 1.4, 2.5);
+
+      /* 1.2-2.5 scan */
+      tl.set('#scan', { opacity: 1 }, 1.2);
+      tl.fromTo('#scan', { x: 0 }, { x: 842, duration: 0.8, ease: 'power1.inOut' }, 1.25);
+      tl.to('#scan', { opacity: 0, duration: 0.15 }, 2.05);
+      tl.to(bars, { opacity: 0.45, duration: 0.4 }, 2.05);
+      tl.fromTo('#sku', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 1.9);
+      count($('#q1'), 0, 14, 2.0, 0.5, int);
+      tl.to('#trackfill', { scaleX: 0.2, duration: 0.5 }, 2.0);
+
+      /* 2.5-4.0 sale */
+      tl.to('#bc', { opacity: 0, duration: 0.3 }, 2.45);
+      tl.to('#pos', { opacity: 1, duration: 0.5, ease: E }, 2.6);
+      chip(2, 2.6); cap(2, 2.9, 4.1);
+      tl.fromTo('#l1', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 2.9);
+      count($('#qv'), 1, 2, 3.2, 0.2, int);
+      tl.fromTo('#qv', { scale: 1.35 }, { scale: 1, duration: 0.3, ease: E }, 3.2);
+      count($('#a1'), 1499, 2998, 3.2, 0.4, fmt);
+      count($('#sub'), 1499, 2998, 3.2, 0.4, fmt); count($('#tot'), 1499, 2998, 3.2, 0.4, fmt); count($('#ctat'), 1499, 2998, 3.2, 0.4, fmt);
+      tl.fromTo('#l2', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 3.45);
+      count($('#sub'), 2998, 3147, 3.55, 0.3, fmt); count($('#tot'), 2998, 3147, 3.55, 0.3, fmt); count($('#ctat'), 2998, 3147, 3.55, 0.3, fmt);
+      tl.to('#payupi', { borderColor: '#c9506f', color: '#f3ece6', backgroundColor: 'rgba(139,21,56,0.35)', duration: 0.25 }, 3.7);
+      tl.fromTo('#cta', { scale: 1 }, { scale: 0.97, duration: 0.12, yoyo: true, repeat: 1, ease: 'power1.inOut' }, 3.9);
+      tl.to('#trackfill', { scaleX: 0.4, duration: 0.5 }, 3.5);
+
+      /* 4.0-5.3 receipt */
+      tl.to('#pos', { opacity: 0, duration: 0.3 }, 4.05);
+      tl.to('#rc', { opacity: 1, duration: 0.2 }, 4.3);
+      draw('#rcline', 4.3, 0.9);
+      tl.to('#rcfill', { opacity: 1, duration: 0.3 }, 4.7);
+      tl.to('#rctext > *', { opacity: 1, duration: 0.3, stagger: 0.07 }, 4.55);
+      chip(3, 4.3); cap(3, 4.5, 5.5);
+      tl.to('#trackfill', { scaleX: 0.6, duration: 0.5 }, 4.6);
+
+      /* 5.3-6.8 stock: same SKU on the shelf and in the ledger */
+      tl.to('#rc', { opacity: 0, duration: 0.3 }, 5.45);
+      tl.to('#sh', { opacity: 1, duration: 0.5, ease: E }, 5.6);
+      draw('#shelfline', 5.7, 0.7);
+      tl.to('#hot', { opacity: 1, duration: 0.4 }, 6.1);
+      count($('#shnum'), 14, 12, 6.3, 0.5, int);
+      tl.set(['#w1', '#n1'], { opacity: 1 }, 6.2); draw('#w1', 6.2, 0.35, 'power2.out');
+      tl.to('#lg', { opacity: 1, duration: 0.5, ease: E }, 6.3);
+      tl.to('#lnew', { opacity: 1, duration: 0.4 }, 6.6); tl.to('#lbal', { opacity: 1, duration: 0.4 }, 6.7);
+      chip(4, 5.6); cap(4, 5.8, 7.0);
+      tl.to('#trackfill', { scaleX: 0.8, duration: 0.5 }, 5.9);
+
+      /* 6.8-8.5 SiBorg */
+      tl.to(['#sh', '#lg', '#w1', '#n1'], { opacity: 0, duration: 0.35 }, 6.95);
+      tl.set('#mk', { opacity: 1 }, 7.2);
+      tl.to('#orbs', { opacity: 1, duration: 0.6 }, 7.3);
+      tl.to(polys, { opacity: 1, duration: 0.45, ease: 'power2.out', stagger: 0.006 }, 7.3);
+      tl.to(core, { opacity: 1, duration: 0.5 }, 7.6);
+      tl.to('#mklabel', { opacity: 1, duration: 0.5 }, 7.8);
+      tl.fromTo('#mkglow', { opacity: 0 }, { opacity: 0.8, duration: 0.15 }, 7.95);
+      tl.to('#mkglow', { opacity: 0.1, duration: 0.7, ease: 'power2.out' }, 8.1);
+      tl.set(['#w2', '#n2'], { opacity: 1 }, 8.0); draw('#w2', 8.0, 0.4, 'power2.out');
+      tl.to('#in', { opacity: 1, duration: 0.5, ease: E }, 8.15);
+      tl.to('#act', { opacity: 1, duration: 0.45 }, 8.5);
+      chip(5, 7.2); cap(5, 7.4, 9.4);
+      tl.to('#trackfill', { scaleX: 1, duration: 0.5 }, 7.4);
+
+      /* 9.45-10: settle back to the opening canvas for a clean loop */
+      tl.to(['#mk', '#in', '#wires', '#track', '#trackline', '#cap'], { opacity: 0, duration: 0.5, ease: 'power2.inOut' }, 9.45);
+      tl.to('#trackfill', { opacity: 0, duration: 0.5 }, 9.45);
+
+      window.__timelines['main'] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

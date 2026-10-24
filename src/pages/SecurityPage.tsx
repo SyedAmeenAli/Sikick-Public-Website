@@ -1,5 +1,6 @@
 import { Shield, Users, Database, Lock, FileText, AlertTriangle } from 'lucide-react';
 import { useSeo } from '../lib/seo';
+import { AccessPathIllustration } from '../components/hairline/Illustrations';
 
 export default function SecurityPage() {
   useSeo({
@@ -21,6 +22,12 @@ export default function SecurityPage() {
           </p>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <AccessPathIllustration />
+        </div>
+      </section>
+
 
       <section className="section section-blush" style={{ paddingTop: 0 }}>
         <div className="container" style={{ maxWidth: '46rem' }}>

@@ -5,3 +5,6 @@ dist-ssr
 .env
 .DS_Store
 node_modules/.tmp
+dev.log
+preview.log
+.claude/

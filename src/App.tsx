@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useParams } from 'react-router-dom';
+import { SmoothScrollProvider, ScrollToTopOnRoute } from './lib/smoothScroll';
 import { MarketingLayout } from './layout/MarketingLayout';
 import HomePage from './pages/HomePage';
 import ProductOverviewPage from './pages/ProductOverviewPage';
@@ -24,50 +25,51 @@ import LegalPrivacyPage from './pages/LegalPrivacyPage';
 import LegalTermsPage from './pages/LegalTermsPage';
 import NotFoundPage from './pages/NotFoundPage';
 
-function wrap(element: React.ReactNode) {
-  return <MarketingLayout>{element}</MarketingLayout>;
-}
-
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={wrap(<HomePage />)} />
-        <Route path="/product" element={wrap(<ProductOverviewPage />)} />
-        <Route path="/product/inventory" element={wrap(<ProductInventoryPage />)} />
-        <Route path="/product/pos" element={wrap(<ProductPosPage />)} />
-        <Route path="/product/purchasing" element={wrap(<ProductPurchasingPage />)} />
-        <Route path="/product/stock-control" element={wrap(<ProductStockControlPage />)} />
-        <Route path="/product/reports" element={wrap(<ProductReportsPage />)} />
-        <Route path="/product/siborg" element={wrap(<ProductSiBorgPage />)} />
-        <Route path="/solutions/:slug" element={<SolutionsRoute />} />
-        <Route path="/industries" element={wrap(<IndustriesPage />)} />
-        <Route path="/industries/:slug" element={<IndustryRoute />} />
-        <Route path="/pricing" element={wrap(<PricingPage />)} />
-        <Route path="/setup" element={wrap(<SetupPage />)} />
-        <Route path="/configurator" element={<Navigate to="/setup" replace />} />
-        <Route path="/integrations" element={wrap(<IntegrationsPage />)} />
-        <Route path="/resources" element={wrap(<ResourcesPage />)} />
-        <Route path="/about" element={wrap(<AboutPage />)} />
-        <Route path="/contact" element={wrap(<ContactPage />)} />
-        <Route path="/security" element={wrap(<SecurityPage />)} />
-        <Route path="/request-quote" element={wrap(<RequestQuotePage />)} />
-        <Route path="/trial" element={wrap(<TrialHandoffPage />)} />
-        <Route path="/login" element={wrap(<LoginHandoffPage />)} />
-        <Route path="/legal/privacy" element={wrap(<LegalPrivacyPage />)} />
-        <Route path="/legal/terms" element={wrap(<LegalTermsPage />)} />
-        <Route path="*" element={wrap(<NotFoundPage />)} />
-      </Routes>
+      <SmoothScrollProvider>
+        <ScrollToTopOnRoute />
+        <Routes>
+          <Route element={<MarketingLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/product" element={<ProductOverviewPage />} />
+            <Route path="/product/inventory" element={<ProductInventoryPage />} />
+            <Route path="/product/pos" element={<ProductPosPage />} />
+            <Route path="/product/purchasing" element={<ProductPurchasingPage />} />
+            <Route path="/product/stock-control" element={<ProductStockControlPage />} />
+            <Route path="/product/reports" element={<ProductReportsPage />} />
+            <Route path="/product/siborg" element={<ProductSiBorgPage />} />
+            <Route path="/solutions/:slug" element={<SolutionsRoute />} />
+            <Route path="/industries" element={<IndustriesPage />} />
+            <Route path="/industries/:slug" element={<IndustryRoute />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/setup" element={<SetupPage />} />
+            <Route path="/configurator" element={<Navigate to="/setup" replace />} />
+            <Route path="/integrations" element={<IntegrationsPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/security" element={<SecurityPage />} />
+            <Route path="/request-quote" element={<RequestQuotePage />} />
+            <Route path="/trial" element={<TrialHandoffPage />} />
+            <Route path="/login" element={<LoginHandoffPage />} />
+            <Route path="/legal/privacy" element={<LegalPrivacyPage />} />
+            <Route path="/legal/terms" element={<LegalTermsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </SmoothScrollProvider>
     </BrowserRouter>
   );
 }
 
 function SolutionsRoute() {
-  const slug = window.location.pathname.split('/').pop() ?? 'retail';
-  return wrap(<SolutionsPage slug={slug} />);
+  const { slug = 'retail' } = useParams();
+  return <SolutionsPage slug={slug} />;
 }
 
 function IndustryRoute() {
-  const slug = window.location.pathname.split('/').pop() ?? '';
-  return wrap(<IndustryDetailPage slug={slug} />);
+  const { slug = '' } = useParams();
+  return <IndustryDetailPage slug={slug} />;
 }

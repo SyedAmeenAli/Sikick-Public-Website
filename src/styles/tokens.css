@@ -1,7 +1,7 @@
 /* Sikick public website — design tokens.
-   Direction: warm white/ivory canvas + wine accents with restraint.
-   Dark near-black/wine is reserved for the product dashboard preview
-   and an occasional closing panel. */
+   Direction: charcoal / near-black surfaces, warm ivory text, restrained
+   wine accents. All colour decisions flow from these tokens. */
+:root { color-scheme: dark; }
 :root {
   --sikick-paper: #faf8f6;
   --sikick-white: #fffefc;
@@ -15,24 +15,26 @@
   --sikick-wine-700: #8b1538;
   --sikick-wine-600: #950e2d;
   --sikick-mauve: #b45c7a;
-  --sikick-success: #2f6b50;
-  --sikick-warning: #946a28;
-  --sikick-danger: #a62b43;
-  --sikick-info: #3b5a80;
+  --sikick-success: #7fc8a4;
+  --sikick-warning: #e0a55c;
+  --sikick-danger: #e5738a;
+  --sikick-info: #8fb0d8;
   --sikick-dashboard-bg: #100d10;
   --sikick-dashboard-card: #191317;
 
   /* Semantic aliases */
-  --paper: var(--sikick-paper);
-  --surface: var(--sikick-white);
-  --surface-alt: var(--sikick-blush);
-  --border: var(--sikick-border);
-  --border-strong: #d9c8cd;
-  --text: var(--sikick-ink);
-  --text-muted: var(--sikick-muted);
-  --accent: var(--sikick-wine-700);
-  --accent-hover: var(--sikick-wine-800);
-  --accent-soft: var(--sikick-blush);
+  --paper: #0d0a0c;
+  --surface: #151013;
+  --surface-alt: #1a1316;
+  --border: rgb(243 236 230 / 0.1);
+  --border-strong: rgb(243 236 230 / 0.18);
+  --text: #f3ece6;
+  --text-muted: #a99da2;
+  --accent: #d9708b;
+  --accent-fill: #8b1538;
+  --accent-line: #c9506f;
+  --accent-hover: #e48fa5;
+  --accent-soft: rgb(217 112 139 / 0.12);
   --on-dark-text: #f7efe9;
   --on-dark-muted: #c9aeb6;
 
@@ -59,17 +61,36 @@
   --radius-lg: 16px;
   --radius-xl: 22px;
   --radius-pill: 999px;
-  --shadow-sm: 0 1px 2px rgb(42 11 19 / 0.05);
-  --shadow-md: 0 6px 24px -8px rgb(42 11 19 / 0.12);
-  --shadow-lg: 0 24px 64px -24px rgb(42 11 19 / 0.22);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 6px 24px -8px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 24px 64px -24px rgb(0 0 0 / 0.7);
 
-  /* Motion */
-  --dur-micro: 150ms;
-  --dur-common: 210ms;
-  --dur-panel: 300ms;
-  --dur-scene: 480ms;
+  /* Motion system: one family of durations and curves for the whole site. */
+  --dur-micro: 150ms;      /* hover / press feedback */
+  --dur-common: 210ms;     /* dropdowns, popovers, cards */
+  --dur-panel: 320ms;      /* drawers, modals, product-UI swaps */
+  --dur-scene: 560ms;      /* section entrances */
+  --dur-route: 220ms;      /* route changes */
+  --dur-draw: 1400ms;      /* SVG line drawing */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-draw: cubic-bezier(0.5, 0, 0.2, 1);
+  --route-shift: 8px;
+
+  /* Glass surfaces */
+  --glass-fill: rgb(21 16 19 / 0.62);
+  --glass-fill-strong: rgb(24 18 21 / 0.82);
+  --glass-border: rgb(243 236 230 / 0.12);
+  --glass-border-hover: rgb(217 112 139 / 0.45);
+  --glass-highlight: rgb(243 236 230 / 0.14);
+  --glass-shadow: 0 20px 48px -24px rgb(0 0 0 / 0.7);
+  --glass-blur: 14px;
+
+  /* Hairlines */
+  --hair: 1.25px;
+  --hair-ivory: rgb(243 236 230 / 0.78);
+  --hair-dim: rgb(243 236 230 / 0.32);
+  --hair-wine: #c9506f;
 
   /* Layout */
   --container: 1200px;

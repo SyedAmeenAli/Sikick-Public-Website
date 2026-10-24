@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Send, X } from 'lucide-react';
+import { Send, X } from 'lucide-react';
+import { SiBorgMark, type SiBorgState } from './hairline/SiBorgMark';
+
+// three.js only loads when the drawer is first opened
+const SiBorgObject3D = lazy(() => import('./SiBorgObject3D').then((m) => ({ default: m.SiBorgObject3D })));
 
 const CHATBOT_NAME = 'SiBorg';
 const CHATBOT_MARKER = '₹5';
 const CHATBOT_LABEL = `${CHATBOT_NAME} ${CHATBOT_MARKER}`;
-const CHATBOT_PRICE_BASIS = 'unresolved-business-rule';
 
 type Message = { role: 'bot' | 'user'; text: string };
 
@@ -77,9 +80,15 @@ export function Chatbot() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const hasOpened = useRef(false);
+  const [mark, setMark] = useState<SiBorgState>('idle');
+  const [everOpened, setEverOpened] = useState(false);
+  const settle = useRef<number | null>(null);
 
   useEffect(() => {
     if (!open) return;
+    hasOpened.current = true;
+    setEverOpened(true);
     const timer = window.setTimeout(() => inputRef.current?.focus(), 180);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
@@ -92,7 +101,7 @@ export function Chatbot() {
   }, [open]);
 
   useEffect(() => {
-    if (open) return;
+    if (open || !hasOpened.current) return;
     launcherRef.current?.focus();
   }, [open]);
 
@@ -101,9 +110,13 @@ export function Chatbot() {
     if (!trimmed) return;
     setMessages((current) => [...current, { role: 'user', text: trimmed }]);
     setInput('');
+    setMark('thinking');
     window.setTimeout(() => {
       const response = replyFor(trimmed);
       setMessages((current) => [...current, { role: 'bot', text: response.text }]);
+      setMark(response.navigate ? 'recommend' : 'insight');
+      if (settle.current) window.clearTimeout(settle.current);
+      settle.current = window.setTimeout(() => setMark('idle'), 4500);
       if (response.navigate) {
         window.setTimeout(() => navigate(response.navigate!), 360);
       }
@@ -123,7 +136,7 @@ export function Chatbot() {
         onClick={() => setOpen((value) => !value)}
       >
         <span className="chatbot-launcher-icon" aria-hidden="true">
-          <MessageCircle size={18} />
+          <SiBorgMark size={30} state="idle" />
         </span>
         <span>{CHATBOT_LABEL}</span>
       </button>
@@ -138,7 +151,8 @@ export function Chatbot() {
         aria-labelledby="sikick-siborg-title"
       >
         <div className="chatbot-head">
-          <div>
+          <SiBorgMark size={44} state={open ? mark : 'idle'} />
+          <div className="chatbot-head-text">
             <strong id="sikick-siborg-title">{CHATBOT_LABEL}</strong>
             <span>Public setup assistant</span>
           </div>
@@ -146,7 +160,14 @@ export function Chatbot() {
             <X size={18} />
           </button>
         </div>
-        <div className="chatbot-log" aria-live="polite">
+        <div className="chatbot-stage" aria-hidden="true">
+          {everOpened && (
+            <Suspense fallback={<SiBorgMark size={120} state={mark} />}>
+              <SiBorgObject3D state={open ? mark : 'idle'} />
+            </Suspense>
+          )}
+        </div>
+        <div className="chatbot-log" aria-live="polite" data-lenis-prevent>
           {messages.map((message, index) => (
             <div key={index} className={`chatbot-msg chatbot-msg-${message.role}`}>
               {message.text}
@@ -173,13 +194,15 @@ export function Chatbot() {
             onChange={(event) => setInput(event.target.value)}
             placeholder="Ask about plans, sectors or features"
             aria-label="SiBorg message"
+            onFocus={() => setMark((m) => (m === 'idle' ? 'listening' : m))}
+            onBlur={() => setMark((m) => (m === 'listening' ? 'idle' : m))}
           />
           <button type="submit" className="chatbot-send" aria-label="Send message">
             <Send size={16} />
           </button>
         </form>
         <p className="chatbot-note">
-          Deterministic public-site guidance. No private shop data is accessed. Commercial basis for {CHATBOT_LABEL}: {CHATBOT_PRICE_BASIS}.
+          Public-site guidance only. No private shop data is accessed and nothing here changes an account.
         </p>
       </div>
     </div>

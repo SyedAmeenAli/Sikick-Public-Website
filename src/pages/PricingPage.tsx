@@ -387,12 +387,12 @@ export default function PricingPage() {
         .pricing-plan-body { padding: var(--space-20) var(--space-24) var(--space-24); border-top: 1px solid var(--border); margin-top: var(--space-20); flex: 1; display: flex; flex-direction: column; }
         .pricing-plan-desc { color: var(--text-muted); font-size: 0.92rem; margin: 0 0 var(--space-12); }
         .pricing-plan-body .btn { margin-top: auto; align-self: flex-start; }
-        .tint-rose .pricing-plan-header { background: linear-gradient(180deg, #fde7ec 0%, transparent 100%); }
-        .tint-lilac .pricing-plan-header { background: linear-gradient(180deg, #efe7f3 0%, transparent 100%); }
-        .tint-champagne .pricing-plan-header { background: linear-gradient(180deg, #f4efe4 0%, transparent 100%); }
-        .tint-rose.is-compact .pricing-plan-header { background: #fde7ec; }
-        .tint-lilac.is-compact .pricing-plan-header { background: #efe7f3; }
-        .tint-champagne.is-compact .pricing-plan-header { background: #f4efe4; }
+        .tint-rose .pricing-plan-header { background: linear-gradient(180deg, rgb(201 80 111 / 0.16) 0%, transparent 100%); }
+        .tint-lilac .pricing-plan-header { background: linear-gradient(180deg, rgb(160 130 200 / 0.13) 0%, transparent 100%); }
+        .tint-champagne .pricing-plan-header { background: linear-gradient(180deg, rgb(220 190 130 / 0.12) 0%, transparent 100%); }
+        .tint-rose.is-compact .pricing-plan-header { background: rgb(201 80 111 / 0.16); }
+        .tint-lilac.is-compact .pricing-plan-header { background: rgb(160 130 200 / 0.13); }
+        .tint-champagne.is-compact .pricing-plan-header { background: rgb(220 190 130 / 0.12); }
 
         /* Mobile accordion */
         .pricing-mobile { display: grid; gap: var(--space-16); }
@@ -408,9 +408,9 @@ export default function PricingPage() {
         .pricing-mobile-body p { color: var(--text-muted); font-size: 0.92rem; margin: var(--space-16) 0; }
         .pricing-mobile-body .btn { margin-top: var(--space-16); width: 100%; }
 
-        .tint-rose > summary { background: linear-gradient(90deg, #fde7ec, transparent 70%); }
-        .tint-lilac > summary { background: linear-gradient(90deg, #efe7f3, transparent 70%); }
-        .tint-champagne > summary { background: linear-gradient(90deg, #f4efe4, transparent 70%); }
+        .tint-rose > summary { background: linear-gradient(90deg, rgb(201 80 111 / 0.16), transparent 70%); }
+        .tint-lilac > summary { background: linear-gradient(90deg, rgb(160 130 200 / 0.13), transparent 70%); }
+        .tint-champagne > summary { background: linear-gradient(90deg, rgb(220 190 130 / 0.12), transparent 70%); }
 
         @media (min-width: 900px) {
           .pricing-selector-desktop { display: flex; }

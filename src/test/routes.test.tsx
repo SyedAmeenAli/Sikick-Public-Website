@@ -6,7 +6,7 @@ describe('routes', () => {
   it('renders the home page', async () => {
     window.history.pushState({}, 'Home', '/');
     render(<App />);
-    expect(await screen.findByRole('heading', { name: /Know your stock/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /Know what is on the shelf/i })).toBeInTheDocument();
   });
 
   it('renders pricing page', async () => {

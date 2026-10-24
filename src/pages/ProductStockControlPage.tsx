@@ -4,6 +4,7 @@ import { Check, ArrowRight, Layers, ClipboardCheck, ArrowLeftRight, FlaskConical
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
 import { FaqAccordion } from '../components/FaqAccordion';
+import { StockMovementIllustration } from '../components/hairline/Illustrations';
 
 const features = [
   {
@@ -82,6 +83,12 @@ export default function ProductStockControlPage() {
           </div>
         </div>
       </section>
+      <section className="section section-visual">
+        <div className="container">
+          <StockMovementIllustration />
+        </div>
+      </section>
+
 
       <section className="section section-blush">
         <div className="container">
@@ -107,7 +114,7 @@ export default function ProductStockControlPage() {
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-dot" />
                 <span className="ui-chrome-url">sikick · stock control</span>
-                <span className="ui-demo-tag">Sample data</span>
+                <span className="ui-demo-tag">Morrow Goods</span>
               </div>
               <div className="ui-body">
                 <div className="ui-topbar">
@@ -116,15 +123,15 @@ export default function ProductStockControlPage() {
                 <div className="ui-panel">
                   <div className="ui-panel-title">Counts this week</div>
                   <div className="ui-row">
-                    <span className="ui-sku">SKU-1042</span>
-                    <span className="ui-name">Cotton T-shirt — Navy / M</span>
-                    <span className="ui-qty">142</span>
+                    <span className="ui-sku">SKU-2081</span>
+                    <span className="ui-name">Wireless earbuds</span>
+                    <span className="ui-qty">14</span>
                     <span className="ui-badge ui-badge-ok">Matched</span>
                   </div>
                   <div className="ui-row">
-                    <span className="ui-sku">SKU-1043</span>
-                    <span className="ui-name">Cotton T-shirt — Navy / L</span>
-                    <span className="ui-qty">38</span>
+                    <span className="ui-sku">SKU-5003</span>
+                    <span className="ui-name">USB-C cable 1m</span>
+                    <span className="ui-qty">150</span>
                     <span className="ui-badge ui-badge-low">Recount</span>
                   </div>
                 </div>
@@ -132,7 +139,7 @@ export default function ProductStockControlPage() {
                   <div className="ui-panel-title">Adjustment</div>
                   <div className="ui-row">
                     <span className="ui-name">Reason</span>
-                    <span className="ui-qty">Damaged in transit</span>
+                    <span className="ui-qty">Damaged on receipt, PO-0182</span>
                   </div>
                   <div className="ui-row">
                     <span className="ui-name">Change</span>
@@ -140,7 +147,7 @@ export default function ProductStockControlPage() {
                   </div>
                   <div className="ui-row">
                     <span className="ui-name">By</span>
-                    <span className="ui-qty">Arjun · 10:42 AM</span>
+                    <span className="ui-qty">Meera · 21 Oct, 10:42</span>
                   </div>
                 </div>
               </div>

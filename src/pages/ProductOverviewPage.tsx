@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRight, Check } from 'lucide-react';
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
+import { WorkflowStory } from '../components/HomeSections';
 
 const sections = [
   { title: 'Inventory and catalog', body: 'Products, categories, variants, SKUs and barcodes with per-variant stock quantities. Import from spreadsheets with validation and confirmation.', to: '/product/inventory' },
@@ -33,6 +34,8 @@ export default function ProductOverviewPage() {
           </div>
         </div>
       </section>
+      <WorkflowStory />
+
       <section className="section section-blush">
         <div className="container">
           <div className="grid grid-3">

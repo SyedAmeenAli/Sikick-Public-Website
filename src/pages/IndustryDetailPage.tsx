@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom';
 import { useSeo } from '../lib/seo';
 import { industryBySlug } from '../data/industries';
+import { SectorScene } from '../components/SectorScene';
 
 export default function IndustryDetailPage({ slug }: { slug: string }) {
   const industry = industryBySlug(slug);
+  useSeo({
+    title: industry?.seo.title ?? 'Sector not found — Sikick',
+    description: industry?.seo.description ?? 'This sector page does not exist.',
+    path: `/industries/${industry?.slug ?? slug}`,
+  });
   if (!industry) {
     return (
       <div className="section">
@@ -15,7 +21,6 @@ export default function IndustryDetailPage({ slug }: { slug: string }) {
       </div>
     );
   }
-  useSeo({ title: industry.seo.title, description: industry.seo.description, path: `/industries/${industry.slug}` });
   return (
     <div>
       <section className="section">
@@ -25,6 +30,7 @@ export default function IndustryDetailPage({ slug }: { slug: string }) {
           <p className="section-lede">{industry.summary}</p>
         </div>
       </section>
+      <SectorScene industry={industry} />
       <section className="section section-blush">
         <div className="container">
           <div className="two-col">

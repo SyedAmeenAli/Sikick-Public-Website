@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu } from 'lucide-react';
 import { useScrolled } from '../lib/motion';
 import { LanguageSelector } from './LanguageSelector';
+import { MobileNav } from './MobileNav';
 import { SIKICK_LOGIN_URL, SIKICK_TRIAL_URL } from '../config/site';
 
 const productItems = [
@@ -40,6 +41,8 @@ export function SiteHeader() {
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const hoverTimer = useRef<number | null>(null);
+  const toggleRef = useRef<HTMLButtonElement | null>(null);
+  const closeMobile = () => setMobileOpen(false);
 
   useEffect(() => {
     setOpenMenu(null);
@@ -55,7 +58,6 @@ export function SiteHeader() {
     const escape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpenMenu(null);
-        setMobileOpen(false);
       }
     };
     document.addEventListener('mousedown', close);
@@ -153,66 +155,20 @@ export function SiteHeader() {
         </div>
 
         <button
+          ref={toggleRef}
           type="button"
           className="nav-toggle"
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
-          aria-label={mobileOpen ? t('nav.close') : t('nav.menu')}
-          onClick={() => setMobileOpen((value) => !value)}
+          aria-haspopup="dialog"
+          aria-label={t('nav.menu')}
+          onClick={() => setMobileOpen(true)}
         >
-          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          <Menu size={20} aria-hidden="true" />
         </button>
       </div>
 
-      <div id="mobile-nav" className="mobile-nav" data-open={mobileOpen}>
-        <div style={{ marginBottom: 'var(--space-16)' }}>
-          <LanguageSelector align="left" />
-        </div>
-        <details>
-          <summary>{t('nav.product')}</summary>
-          <div className="mobile-sub">
-            {productItems.map((item) => (
-              <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}>
-                {t(item.labelKey)}
-              </Link>
-            ))}
-          </div>
-        </details>
-        <details>
-          <summary>{t('nav.solutions')}</summary>
-          <div className="mobile-sub">
-            {solutionItems.map((item) => (
-              <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}>
-                {t(item.labelKey)}
-              </Link>
-            ))}
-          </div>
-        </details>
-        <Link className="mobile-direct" to="/industries" onClick={() => setMobileOpen(false)}>
-          {t('nav.industries')}
-        </Link>
-        <Link className="mobile-direct" to="/pricing" onClick={() => setMobileOpen(false)}>
-          {t('nav.pricing')}
-        </Link>
-        <details>
-          <summary>{t('nav.resources')}</summary>
-          <div className="mobile-sub">
-            {resourceItems.map((item) => (
-              <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}>
-                {t(item.labelKey)}
-              </Link>
-            ))}
-          </div>
-        </details>
-        <div style={{ paddingTop: 'var(--space-24)', display: 'grid', gap: 'var(--space-12)' }}>
-          <a className="btn btn-secondary" href={SIKICK_LOGIN_URL}>
-            {t('nav.login')}
-          </a>
-          <a className="btn btn-primary" href={SIKICK_TRIAL_URL}>
-            {t('nav.trial')}
-          </a>
-        </div>
-      </div>
+      <MobileNav open={mobileOpen} onClose={closeMobile} returnFocusTo={toggleRef} product={productItems} solutions={solutionItems} resources={resourceItems} />
     </header>
   );
 }
