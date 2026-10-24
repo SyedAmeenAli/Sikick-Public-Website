@@ -1,0 +1,187 @@
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { MessageCircle, Send, X } from 'lucide-react';
+
+const CHATBOT_NAME = 'SiBorg';
+const CHATBOT_MARKER = '₹5';
+const CHATBOT_LABEL = `${CHATBOT_NAME} ${CHATBOT_MARKER}`;
+const CHATBOT_PRICE_BASIS = 'unresolved-business-rule';
+
+type Message = { role: 'bot' | 'user'; text: string };
+
+const QUICK_ACTIONS = [
+  'Find the right plan',
+  'Explore my industry',
+  'Compare Core and AI',
+  'Ask about a feature',
+  'Build my setup',
+  'Talk to Enterprise',
+];
+
+function replyFor(input: string): { text: string; navigate?: string } {
+  const text = input.toLowerCase();
+  if (text.includes('plan') || text.includes('price') || text.includes('pricing')) {
+    return {
+      text: 'Core is ₹650/month or ₹6,500/year for everyday operations. AI is ₹2,550/month or ₹25,500/year and adds GST, batch tracking, analytics and SiBorg. Enterprise is a custom quote. Prices are before applicable GST.',
+      navigate: '/pricing',
+    };
+  }
+  if (text.includes('industry') || text.includes('sector')) {
+    return {
+      text: 'Sikick serves 78 inventory-heavy sectors. Search the directory and open a sector page for relevant workflows.',
+      navigate: '/industries',
+    };
+  }
+  if (text.includes('core') && text.includes('ai')) {
+    return {
+      text: 'Core covers catalog, stock, purchasing, POS, customers and reports. AI adds GST, expenses, batch tracking, transfers, stocktakes, analytics and SiBorg.',
+      navigate: '/pricing',
+    };
+  }
+  if (text.includes('feature') || text.includes('barcode') || text.includes('variant')) {
+    return {
+      text: 'Verified features include variants, SKUs, barcodes, stock ledger, adjustments, purchase orders, receiving, customers, quotations, orders, returns, exports and reports. Advanced modules are labeled by plan.',
+      navigate: '/product',
+    };
+  }
+  if (text.includes('enterprise') || text.includes('quote') || text.includes('manufactur')) {
+    return {
+      text: 'Enterprise is for governance, custom workflows, integrations, advanced accounting and manufacturing requirements. It leads to a tailored quote request, not a standard trial.',
+      navigate: '/request-quote',
+    };
+  }
+  if (text.includes('config') || text.includes('setup') || text.includes('business')) {
+    return {
+      text: 'Use the configurator to choose a business type, select workflows, answer a few details, and get a recommended plan with a downloadable blueprint.',
+      navigate: '/setup',
+    };
+  }
+  if (text.includes('trial')) {
+    return {
+      text: 'Core and AI offer a 14-day trial with no payment method required. Email/password signups verify email first.',
+      navigate: '/trial',
+    };
+  }
+  return {
+    text: 'I can help you compare plans, explore sectors, understand verified features, or open the configurator. Choose a quick action or describe your business.',
+  };
+}
+
+export function Chatbot() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'bot', text: 'Hi, I’m SiBorg. Tell me about your business and I’ll help you explore the right Sikick setup.' },
+  ]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const timer = window.setTimeout(() => inputRef.current?.focus(), 180);
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.clearTimeout(timer);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (open) return;
+    launcherRef.current?.focus();
+  }, [open]);
+
+  const send = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    setMessages((current) => [...current, { role: 'user', text: trimmed }]);
+    setInput('');
+    window.setTimeout(() => {
+      const response = replyFor(trimmed);
+      setMessages((current) => [...current, { role: 'bot', text: response.text }]);
+      if (response.navigate) {
+        window.setTimeout(() => navigate(response.navigate!), 360);
+      }
+    }, 300);
+  };
+
+  return (
+    <div className="chatbot-root" data-open={open}>
+      <div className="chatbot-backdrop" aria-hidden="true" onClick={() => setOpen(false)} />
+      <button
+        ref={launcherRef}
+        type="button"
+        className="chatbot-launcher"
+        aria-expanded={open}
+        aria-controls="sikick-siborg-panel"
+        aria-label={`Open ${CHATBOT_LABEL}`}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="chatbot-launcher-icon" aria-hidden="true">
+          <MessageCircle size={18} />
+        </span>
+        <span>{CHATBOT_LABEL}</span>
+      </button>
+
+      <div
+        id="sikick-siborg-panel"
+        ref={panelRef}
+        className="chatbot-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden={!open}
+        aria-labelledby="sikick-siborg-title"
+      >
+        <div className="chatbot-head">
+          <div>
+            <strong id="sikick-siborg-title">{CHATBOT_LABEL}</strong>
+            <span>Public setup assistant</span>
+          </div>
+          <button type="button" className="chatbot-close" aria-label="Close SiBorg" onClick={() => setOpen(false)}>
+            <X size={18} />
+          </button>
+        </div>
+        <div className="chatbot-log" aria-live="polite">
+          {messages.map((message, index) => (
+            <div key={index} className={`chatbot-msg chatbot-msg-${message.role}`}>
+              {message.text}
+            </div>
+          ))}
+        </div>
+        <div className="chatbot-actions">
+          {QUICK_ACTIONS.map((action) => (
+            <button key={action} type="button" className="chatbot-chip" onClick={() => send(action)}>
+              {action}
+            </button>
+          ))}
+        </div>
+        <form
+          className="chatbot-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            send(input);
+          }}
+        >
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Ask about plans, sectors or features"
+            aria-label="SiBorg message"
+          />
+          <button type="submit" className="chatbot-send" aria-label="Send message">
+            <Send size={16} />
+          </button>
+        </form>
+        <p className="chatbot-note">
+          Deterministic public-site guidance. No private shop data is accessed. Commercial basis for {CHATBOT_LABEL}: {CHATBOT_PRICE_BASIS}.
+        </p>
+      </div>
+    </div>
+  );
+}

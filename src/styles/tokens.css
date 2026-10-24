@@ -1,0 +1,78 @@
+/* Sikick public website — design tokens.
+   Direction: warm white/ivory canvas + wine accents with restraint.
+   Dark near-black/wine is reserved for the product dashboard preview
+   and an occasional closing panel. */
+:root {
+  --sikick-paper: #faf8f6;
+  --sikick-white: #fffefc;
+  --sikick-blush: #f5e8ea;
+  --sikick-border: #e8dde0;
+  --sikick-ink: #20181b;
+  --sikick-muted: #6b5c62;
+  --sikick-wine-950: #2a0b13;
+  --sikick-wine-900: #3e0c1b;
+  --sikick-wine-800: #5a081b;
+  --sikick-wine-700: #8b1538;
+  --sikick-wine-600: #950e2d;
+  --sikick-mauve: #b45c7a;
+  --sikick-success: #2f6b50;
+  --sikick-warning: #946a28;
+  --sikick-danger: #a62b43;
+  --sikick-info: #3b5a80;
+  --sikick-dashboard-bg: #100d10;
+  --sikick-dashboard-card: #191317;
+
+  /* Semantic aliases */
+  --paper: var(--sikick-paper);
+  --surface: var(--sikick-white);
+  --surface-alt: var(--sikick-blush);
+  --border: var(--sikick-border);
+  --border-strong: #d9c8cd;
+  --text: var(--sikick-ink);
+  --text-muted: var(--sikick-muted);
+  --accent: var(--sikick-wine-700);
+  --accent-hover: var(--sikick-wine-800);
+  --accent-soft: var(--sikick-blush);
+  --on-dark-text: #f7efe9;
+  --on-dark-muted: #c9aeb6;
+
+  /* Typography */
+  --font-body: 'DM Sans', 'Noto Sans Devanagari', 'Noto Sans Telugu', system-ui,
+    -apple-system, 'Segoe UI', sans-serif;
+  --font-editorial: 'Newsreader', Georgia, 'Times New Roman', serif;
+
+  /* Spacing rhythm: 8/12/16/20/24/32/40/48/64/96 */
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-20: 1.25rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-40: 2.5rem;
+  --space-48: 3rem;
+  --space-64: 4rem;
+  --space-96: 6rem;
+
+  /* Radii + shadows */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgb(42 11 19 / 0.05);
+  --shadow-md: 0 6px 24px -8px rgb(42 11 19 / 0.12);
+  --shadow-lg: 0 24px 64px -24px rgb(42 11 19 / 0.22);
+
+  /* Motion */
+  --dur-micro: 150ms;
+  --dur-common: 210ms;
+  --dur-panel: 300ms;
+  --dur-scene: 480ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Layout */
+  --container: 1200px;
+  --container-wide: 1320px;
+  --header-height: 72px;
+}
