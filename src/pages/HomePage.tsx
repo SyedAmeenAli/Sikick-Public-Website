@@ -5,7 +5,7 @@ import { ArrowRight, Shield, Lock, Eye, FileText } from 'lucide-react';
 import { useReveal } from '../lib/motion';
 import { useSeo } from '../lib/seo';
 import { SIKICK_TRIAL_URL } from '../config/site';
-import { ChapterRail, HeroScene, ModuleWalk, WorkflowStory } from '../components/HomeSections';
+import { ChapterRail, HeroScene, ModuleWalk, SwitchBand, WorkflowStory } from '../components/HomeSections';
 import { PosDemo } from '../components/PosDemo';
 import { SiBorgConstellation, SiBorgDemo, SiBorgStage } from '../components/SiBorgExperience';
 import { AnalyticsLineIllustration, BarcodeScanIllustration, IntegrationTopologyIllustration, InventoryShelfIllustration, PosFlowIllustration, StockMovementIllustration, SupplierRouteIllustration } from '../components/hairline/Illustrations';
@@ -27,7 +27,7 @@ const faqs = [
   { q: 'What payment methods are supported?', a: 'UPI, cards, net banking and international cards are planned. Only methods actually configured in the payment gateway are exposed.' },
   { q: 'Are prices shown with GST?', a: 'No. Subscription prices are shown excluding applicable GST; tax is calculated at checkout and itemized on the invoice.' },
   { q: 'What is SiBorg?', a: 'SiBorg is the in-product intelligence assistant. It explains, recommends and prepares reviewable actions; consequential changes require human approval.' },
-  { q: 'Can I export my data?', a: 'Yes. Products, stock, customers, transactions and reports can be exported. Scheduled exports are part of the AI plan.' },
+  { q: 'Can I export my data?', a: 'The console exports financial reports (trial balance, profit and loss, balance sheet, cash flow), GST returns, the audit log and cashier activity as CSV, and GST returns as JSON too. A one-click export of products, stock, customers and transactions is not available yet; ask for an assisted export on the data migration page.' },
   { q: 'How do integrations work?', a: 'The integrations directory labels each connector by readiness: available, setup required, in development or Enterprise custom.' },
 ];
 
@@ -229,6 +229,8 @@ export default function HomePage() {
             </div>
           </div>
           <IntegrationTopologyIllustration />
+          <div style={{ height: 'var(--space-48)' }} />
+          <SwitchBand />
         </div>
       </section>
 
@@ -272,12 +274,12 @@ export default function HomePage() {
               <p className="eyebrow">Security & trust</p>
               <h2>Your operational data stays under your control.</h2>
               <p className="section-lede">
-                Role-based access, signed audit events, configurable data retention and export. We do not claim perfect security; we describe the protections that are actually implemented.
+                Role-based access, signed audit events and CSV exports of financial reports, GST returns and logs. We do not claim perfect security; we describe the protections that are actually implemented.
               </p>
               <ul className="check-list" style={{ marginTop: 'var(--space-24)' }}>
                 <li><Lock size={18} /> Role-based access inside each workspace.</li>
                 <li><Eye size={18} /> Audit log of important business actions.</li>
-                <li><FileText size={18} /> Export products, stock, customers and transactions.</li>
+                <li><FileText size={18} /> Export financial reports, GST returns and the audit log.</li>
                 <li><Shield size={18} /> Workspace data retention settings you control.</li>
               </ul>
               <Link className="btn btn-secondary" to="/security" style={{ marginTop: 'var(--space-24)' }}>

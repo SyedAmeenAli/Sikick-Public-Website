@@ -65,7 +65,7 @@ export function MobileNav({
         ...sectors.map((s) => ({ to: `/industries/${s.slug}`, label: s.name })),
       ],
     },
-    { key: 'resources', label: t('nav.resources'), prefixes: ['/resources', '/integrations', '/security', '/about', '/contact'], items: map(resources) },
+    { key: 'resources', label: t('nav.resources'), prefixes: ['/resources', '/switch-to-sikick', '/integrations', '/security', '/about', '/contact'], items: map(resources) },
   ];
   const activeGroup = groups.find((g) => g.prefixes.some((p) => location.pathname.startsWith(p)))?.key ?? null;
 

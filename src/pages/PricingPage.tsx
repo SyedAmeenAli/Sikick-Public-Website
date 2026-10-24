@@ -34,7 +34,7 @@ const plans: Plan[] = [
       'Purchase orders and supplier records',
       'POS, quotations, customers and returns',
       'Manual stock counts and adjustments',
-      'Export products, stock, customers and reports',
+      'Export financial reports and GST returns',
     ],
     cta: 'Start a 14-day trial',
     destination: trialUrlWithPlan('Core'),
@@ -321,9 +321,15 @@ export default function PricingPage() {
               </div>
             </details>
             <details className="accordion-item">
+              <summary className="accordion-trigger">Can I move my existing data into Sikick?</summary>
+              <div className="accordion-panel" style={{ maxHeight: 'none' }}>
+                <div className="accordion-panel-inner">Yes, from Excel, CSV or Tally XML, up to 5,000 rows per file, checked before anything is written. Your plan’s product limit is checked before you apply an import. <Link to="/switch-to-sikick">Check your import options</Link>.</div>
+              </div>
+            </details>
+            <details className="accordion-item">
               <summary className="accordion-trigger">Can I export my data?</summary>
               <div className="accordion-panel" style={{ maxHeight: 'none' }}>
-                <div className="accordion-panel-inner">Yes. Products, stock, customers, transactions and reports can be exported. Scheduled exports are part of the AI plan.</div>
+                <div className="accordion-panel-inner">The console exports financial reports (trial balance, profit and loss, balance sheet, cash flow), GST returns, the audit log and cashier activity as CSV, and GST returns as JSON too. A one-click export of products, stock, customers and transactions is not available yet; ask for an assisted export on the data migration page.</div>
               </div>
             </details>
           </div>

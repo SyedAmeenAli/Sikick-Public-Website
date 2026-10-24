@@ -37,6 +37,7 @@ export function SiteFooter() {
               <li><Link to="/solutions/manufacturing">{t('nav.solutions.manufacturing')}</Link></li>
               <li><Link to="/industries">{t('nav.industries.browse')}</Link></li>
               <li><Link to="/integrations">{t('nav.integrations')}</Link></li>
+              <li><Link to="/switch-to-sikick">{t('nav.switch')}</Link></li>
             </ul>
           </div>
           <div className="footer-col">

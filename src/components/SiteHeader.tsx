@@ -26,6 +26,7 @@ const solutionItems = [
 
 const resourceItems = [
   { to: '/resources', labelKey: 'nav.resources.guides', descKey: 'nav.resources.guides.desc' },
+  { to: '/switch-to-sikick', labelKey: 'nav.switch', descKey: 'nav.switch.desc' },
   { to: '/integrations', labelKey: 'nav.integrations', descKey: '' },
   { to: '/security', labelKey: 'nav.security', descKey: '' },
   { to: '/about', labelKey: 'nav.resources.about', descKey: '' },
@@ -93,7 +94,7 @@ export function SiteHeader() {
             const active =
               (menu === 'product' && isActive('/product')) ||
               (menu === 'solutions' && isActive('/solutions')) ||
-              (menu === 'resources' && (isActive('/resources') || isActive('/integrations') || isActive('/security') || isActive('/about') || isActive('/contact')));
+              (menu === 'resources' && (isActive('/resources') || isActive('/switch-to-sikick') || isActive('/integrations') || isActive('/security') || isActive('/about') || isActive('/contact')));
             return (
               <div
                 key={menu}

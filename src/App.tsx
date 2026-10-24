@@ -24,6 +24,7 @@ import TrialHandoffPage, { LoginHandoffPage } from './pages/TrialHandoffPage';
 import LegalPrivacyPage from './pages/LegalPrivacyPage';
 import LegalTermsPage from './pages/LegalTermsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import SwitchToSikickPage from './pages/SwitchToSikickPage';
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/setup" element={<SetupPage />} />
             <Route path="/configurator" element={<Navigate to="/setup" replace />} />
             <Route path="/integrations" element={<IntegrationsPage />} />
+            <Route path="/switch-to-sikick" element={<SwitchToSikickPage />} />
             <Route path="/resources" element={<ResourcesPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />

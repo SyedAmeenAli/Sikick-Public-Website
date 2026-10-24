@@ -54,8 +54,8 @@ export default function AboutPage() {
               <div className="card-icon"><HardDrive size={22} /></div>
               <h3>Data ownership</h3>
               <p>
-                Customers retain practical access to their own business data, including exports and
-                catalog backup. We do not lock data behind opaque formats.
+                Customers retain practical access to their own business data, including CSV exports of financial reports, GST
+                returns and logs, and an assisted export for other records. We do not lock data behind opaque formats.
               </p>
             </div>
           </div>

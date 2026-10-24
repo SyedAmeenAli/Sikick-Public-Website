@@ -4,6 +4,8 @@ import { ArrowRight } from 'lucide-react';
 import { useMedia, useScrollProgress } from '../lib/motion';
 import { HeroFilm } from './HeroFilm';
 import { LEDGER_EARBUDS, PRODUCTS, inr, po, product } from '../data/morrow';
+import { PLATFORMS } from '../data/migration';
+import { PlatformLogo } from './migration/Logo';
 import { HairSvg, P, Signal } from './hairline/kit';
 
 /* ------------------------------------------------------------------ */
@@ -281,4 +283,25 @@ export function ChapterRail({ children }: { children: React.ReactNode }) {
 export function ReadingProgress() {
   const ref = useScrollProgress<HTMLDivElement>(undefined, 'sticky');
   return <div ref={ref} className="reading-progress" aria-hidden="true" />;
+}
+
+/** Quiet pointer to the migration page, where a visitor would wonder how to bring their data. */
+export function SwitchBand() {
+  return (
+    <div className="switch-band">
+      <div>
+        <p className="eyebrow">Moving from another system?</p>
+        <h2>Bring your catalog with you.</h2>
+        <p>Import items and parties from Excel, CSV or Tally XML. Every route says what has been verified and what has not, and the file is checked before anything is written.</p>
+        <p style={{ marginTop: 'var(--space-24)' }}>
+          <Link className="btn btn-primary" to="/switch-to-sikick">Explore data migration <ArrowRight size={16} aria-hidden="true" /></Link>
+        </p>
+      </div>
+      <div className="switch-band-logos" aria-label="Software you can move from">
+        {PLATFORMS.filter((p) => p.logo && p.id !== 'excel').map((p) => (
+          <Link key={p.id} to={`/switch-to-sikick#from=${p.id}`} aria-label={`Moving from ${p.name}`}><PlatformLogo platform={p} area={3200} maxWidth={110} /></Link>
+        ))}
+      </div>
+    </div>
+  );
 }

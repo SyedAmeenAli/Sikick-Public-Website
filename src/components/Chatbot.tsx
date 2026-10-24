@@ -43,7 +43,7 @@ function replyFor(input: string): { text: string; navigate?: string } {
   }
   if (text.includes('feature') || text.includes('barcode') || text.includes('variant')) {
     return {
-      text: 'Verified features include variants, SKUs, barcodes, stock ledger, adjustments, purchase orders, receiving, customers, quotations, orders, returns, exports and reports. Advanced modules are labeled by plan.',
+      text: 'Verified features include variants, SKUs, barcodes, stock ledger, adjustments, purchase orders, receiving, customers, quotations, orders, returns and reports, with CSV export of financial reports and GST returns. Advanced modules are labeled by plan.',
       navigate: '/product',
     };
   }

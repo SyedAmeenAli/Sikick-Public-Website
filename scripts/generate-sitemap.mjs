@@ -20,6 +20,7 @@ const staticRoutes = [
   '/pricing',
   '/setup',
   '/integrations',
+  '/switch-to-sikick',
   '/resources',
   '/about',
   '/contact',

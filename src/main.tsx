@@ -12,6 +12,7 @@ import '@fontsource/newsreader/500-italic.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/motion.css';
+import './styles/migration.css';
 
 async function bootstrap() {
   const preferred = storedLanguage() ?? browserLanguage() ?? 'en';

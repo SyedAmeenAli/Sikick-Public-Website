@@ -428,6 +428,12 @@ export default function SetupPage() {
           )}
         </div>
       </section>
+      <section className="section section-tight">
+        <div className="container" style={{ maxWidth: '44rem' }}>
+          <p className="eyebrow">Already have data elsewhere?</p>
+          <p className="section-lede">Products and parties can be imported from a spreadsheet, TallyPrime or Vyapar, and we can check other systems with you. <Link to="/switch-to-sikick">Plan your migration</Link>.</p>
+        </div>
+      </section>
     </div>
   );
 }

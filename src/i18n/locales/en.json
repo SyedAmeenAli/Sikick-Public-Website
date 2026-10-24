@@ -108,5 +108,7 @@
   "common.sample": "Morrow Goods",
   "common.notFound.title": "Page not found",
   "common.notFound.body": "The page you asked for does not exist. Try the directory, pricing or the configurator.",
-  "common.notFound.home": "Back to home"
+  "common.notFound.home": "Back to home",
+  "nav.switch": "Switch to Sikick",
+  "nav.switch.desc": "Move your data in from another system"
 }

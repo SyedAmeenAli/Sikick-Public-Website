@@ -484,7 +484,7 @@ const ACCESS_STEPS = [
   { id: 'role', label: 'Role check', note: 'Role-based access decides which screens and actions that person can use inside the workspace.' },
   { id: 'action', label: 'Action', note: 'The person works with stock, sales or purchasing records within the access they were given.' },
   { id: 'audit', label: 'Audit log', note: 'Important business actions are written to an audit log with who did what and when.' },
-  { id: 'export', label: 'Export', note: 'Products, stock, customers and transactions can be exported, so the data stays under your control.' },
+  { id: 'export', label: 'Export', note: 'Financial reports, GST returns and the audit log export as CSV, so those records stay under your control.' },
 ];
 
 export function AccessPathIllustration() {

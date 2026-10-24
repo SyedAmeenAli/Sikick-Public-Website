@@ -29,8 +29,8 @@ const features = [
   },
   {
     icon: FileSpreadsheet,
-    title: 'Export and audit trail',
-    body: 'Export the catalog or stock ledger at any time. Every quantity change is reasoned and logged with a user attribution.',
+    title: 'Audit trail and export',
+    body: 'Every quantity change is reasoned and logged with a user attribution, and the audit log exports as CSV. A one-click catalog or stock export is not available yet; ask for an assisted export.',
   },
   {
     icon: AlertCircle,

@@ -176,7 +176,7 @@ export default function LegalPrivacyPage() {
             disputes, enforce agreements, comply with legal obligations and support recovery.
           </p>
           <p>
-            You can export most business data from within the Sikick console. After you close your account, data may
+            You can export financial reports, GST returns, the audit log and cashier activity from within the Sikick console, and you can ask us for an assisted export of other records. After you close your account, data may
             enter a restricted retention period before permanent deletion, unless we are required to keep it longer by
             law. Backups are retained for disaster-recovery purposes and are removed according to our backup retention
             schedule.

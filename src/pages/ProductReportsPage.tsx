@@ -34,8 +34,8 @@ const features = [
   },
   {
     icon: Check,
-    title: 'Exportable and shareable',
-    body: 'Export reports in common formats for your accountant, buyer or management review. Scheduled exports are part of the AI plan.',
+    title: 'Exportable financial reports',
+    body: 'Trial balance, profit and loss, balance sheet and cash flow export as CSV for your accountant. GST returns export as CSV or JSON.',
   },
 ];
 
@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     question: 'What is in the AI plan?',
-    answer: 'The AI plan adds interactive dashboards, trend analysis, comparisons, forecasts and SiBorg-generated insights. Scheduled exports are also part of the AI plan.',
+    answer: 'The AI plan adds interactive dashboards, trend analysis, comparisons, forecasts and SiBorg-generated insights.',
   },
   {
     question: 'How current is the data in reports?',
@@ -105,7 +105,7 @@ export default function ProductReportsPage() {
                 <li><Check size={18} /> Sales, stock and purchase reports in Core.</li>
                 <li><Check size={18} /> Interactive dashboards in the AI plan.</li>
                 <li><Check size={18} /> Trends, comparisons and AI-generated insights.</li>
-                <li><Check size={18} /> Export for accountants, buyers and management.</li>
+                <li><Check size={18} /> Export financial reports for your accountant.</li>
               </ul>
             </div>
             <div className="ui-frame">

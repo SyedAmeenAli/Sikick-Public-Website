@@ -44,6 +44,9 @@ export const SIKICK_POS_URL = trimSlash(
 /** Optional POST endpoint for the Enterprise quote form. Empty = not configured. */
 export const QUOTE_ENDPOINT: string | null = env.VITE_SIKICK_QUOTE_ENDPOINT?.trim() || null;
 
+/** Optional POST endpoint for assisted-migration requests. Falls back to the quote endpoint. */
+export const MIGRATION_ENDPOINT: string | null = env.VITE_SIKICK_MIGRATION_ENDPOINT?.trim() || QUOTE_ENDPOINT;
+
 /** Optional POST endpoint for blueprint email delivery. Empty = not configured. */
 export const EMAIL_ENDPOINT: string | null = env.VITE_SIKICK_EMAIL_ENDPOINT?.trim() || null;
 
