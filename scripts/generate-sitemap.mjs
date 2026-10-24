@@ -34,4 +34,5 @@ const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.s
   .join('\n')}\n</urlset>\n`;
 
 fs.writeFileSync('public/sitemap.xml', xml);
+if (fs.existsSync('dist')) fs.writeFileSync('dist/sitemap.xml', xml);
 console.log(`Wrote sitemap with ${urls.length} urls.`);
